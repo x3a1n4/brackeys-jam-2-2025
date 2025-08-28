@@ -1,58 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dinan80h1iwes"]
+[gd_scene load_steps=3 format=3 uid="uid://dinan80h1iwes"]
 
 [ext_resource type="Script" uid="uid://c7pwbn3exo85f" path="res://scripts/rope.gd" id="1_icxtj"]
-[ext_resource type="Script" uid="uid://42xt3u1edtpq" path="res://scripts/rope_segment.gd" id="2_ghbyf"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_icxtj"]
-
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_icxtj"]
-b = Vector2(48, 0)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_icxtj"]
+[ext_resource type="PackedScene" uid="uid://dg677m2m17xm6" path="res://scenes/rope/rope_segment.tscn" id="2_ghbyf"]
 
 [node name="Rope" type="Node2D"]
 script = ExtResource("1_icxtj")
 
-[node name="DrawLine" type="Line2D" parent="."]
-points = PackedVector2Array(0, 0, 27, 0)
-
-[node name="Segment" type="RigidBody2D" parent="."]
-collision_layer = 0
-collision_mask = 4
-script = ExtResource("2_ghbyf")
-
-[node name="Sprite2D" type="Sprite2D" parent="Segment"]
-visible = false
-position = Vector2(24, 0)
-scale = Vector2(58, 10)
-texture = SubResource("PlaceholderTexture2D_icxtj")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Segment"]
-shape = SubResource("SegmentShape2D_icxtj")
-
-[node name="PinJoint2D" type="PinJoint2D" parent="Segment"]
-position = Vector2(47, 0)
-node_a = NodePath("..")
-node_b = NodePath("../../End")
-motor_enabled = true
-
-[node name="Start" type="StaticBody2D" parent="."]
-collision_layer = 0
-collision_mask = 0
-
-[node name="PinJoint2D" type="PinJoint2D" parent="Start"]
-node_a = NodePath("..")
-node_b = NodePath("../../Segment")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Start"]
-shape = SubResource("CircleShape2D_icxtj")
-disabled = true
-
-[node name="End" type="StaticBody2D" parent="."]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="End"]
-position = Vector2(47, 0)
-shape = SubResource("CircleShape2D_icxtj")
-disabled = true
+[node name="Segment" parent="." instance=ExtResource("2_ghbyf")]

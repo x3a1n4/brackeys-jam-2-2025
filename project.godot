@@ -15,6 +15,10 @@ run/main_scene="uid://ccjhmipohom76"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+DebugDraw2D="*res://addons/debugdraw2d/DebugDraw2D.gd"
+
 [editor]
 
 version_control/plugin_name="GitPlugin"
@@ -22,7 +26,7 @@ version_control/autoload_on_startup=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/AS2P/plugin.cfg")
+enabled=PackedStringArray("res://addons/AS2P/plugin.cfg", "res://addons/debugdraw2d/plugin.cfg")
 
 [input]
 

@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://dinan80h1iwes"]
+
+[ext_resource type="Script" uid="uid://c7pwbn3exo85f" path="res://scripts/rope.gd" id="1_icxtj"]
+[ext_resource type="Script" uid="uid://42xt3u1edtpq" path="res://scripts/rope_segment.gd" id="2_ghbyf"]
+
+[sub_resource type="Curve" id="Curve_ghbyf"]
+_limits = [-1.0, 0.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, -3.18583, 0, 0, Vector2(0.589499, -1), 0.0, 0.0, 0, 0, Vector2(1, 0), 4.04954, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_vlfmi"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.324582, 0.584854), 0.0, 0.0, 0, 0, Vector2(0.708831, -0.458942), 0.0, 0.0, 0, 0, Vector2(1, 0.00364959), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[node name="Rope" type="Node2D"]
+script = ExtResource("1_icxtj")
+
+[node name="Segment" type="Node2D" parent="."]
+script = ExtResource("2_ghbyf")
+rope_curve = SubResource("Curve_ghbyf")
+slack_curve = SubResource("Curve_vlfmi")
+
+[node name="DrawLine" type="Line2D" parent="Segment"]
+points = PackedVector2Array(0, 0, 95, 0)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true

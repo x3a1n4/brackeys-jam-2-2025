@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=3 uid="uid://cv5fhuqb640mg"]
+[gd_scene load_steps=74 format=3 uid="uid://cv5fhuqb640mg"]
 
 [ext_resource type="Texture2D" uid="uid://dyilspd1wyf47" path="res://assets/player/idle_stand.png" id="1_3vyb7"]
 [ext_resource type="Texture2D" uid="uid://skwfft5rafxr" path="res://assets/player/air_fall.png" id="1_ur7pv"]
@@ -177,6 +177,9 @@ animations = [{
 "name": &"wall_slide",
 "speed": 5.0
 }]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_y4r1p"]
+size = Vector2(20, 20)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_u8vuu"]
 radius = 28.0
@@ -1295,6 +1298,10 @@ autoplay = "idle_stand"
 
 [node name="Rope Attach Point" type="Node2D" parent="Visual"]
 position = Vector2(19, -141)
+
+[node name="Sprite2D" type="Sprite2D" parent="Visual/Rope Attach Point"]
+visible = false
+texture = SubResource("PlaceholderTexture2D_y4r1p")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -97)
