@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://dinan80h1iwes"]
+
+[ext_resource type="Script" uid="uid://c7pwbn3exo85f" path="res://scripts/rope.gd" id="1_icxtj"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_icxtj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ghbyf"]
+radius = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_icxtj"]
+
+[node name="Rope" type="Node2D"]
+script = ExtResource("1_icxtj")
+
+[node name="DrawLine" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 27, 0)
+
+[node name="Segment" type="RigidBody2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="Segment"]
+scale = Vector2(10, 10)
+texture = SubResource("PlaceholderTexture2D_icxtj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Segment"]
+shape = SubResource("CircleShape2D_ghbyf")
+
+[node name="DampedSpringJoint2D" type="DampedSpringJoint2D" parent="Segment"]
+rotation = -1.57077
+node_a = NodePath("../../Start")
+node_b = NodePath("../../End")
+rest_length = 50.0
+
+[node name="Start" type="StaticBody2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Start"]
+shape = SubResource("CircleShape2D_icxtj")
+disabled = true
+
+[node name="End" type="StaticBody2D" parent="."]
+position = Vector2(50, 0)
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="End"]
+shape = SubResource("CircleShape2D_icxtj")
+disabled = true
