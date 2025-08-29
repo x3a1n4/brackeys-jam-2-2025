@@ -24,6 +24,7 @@ var was_on_wall : bool = false
 
 @export var swing_curve: Curve
 @export var swing_time = 0.2
+var current_swing_time : float
 @onready var swing_timer : Timer = $"Timers/Swing Timer"
 var was_swinging : bool = false
 var start_swing_pos : Vector2 = Vector2.ZERO
@@ -86,7 +87,8 @@ func _physics_process(delta):
 	# step three: based on animation state, control movement
 	var targetVelocity : Vector2 = Vector2.ZERO
 	var smoothFactor = 0.5
-	match animationStateMachinePlayback.get_current_node():
+	var currAnimationNode : String = animationStateMachinePlayback.get_current_node()
+	match currAnimationNode:
 		"Run_1D":
 			# move left and right depending on ground_curve
 			# move_toward(velocity.x, 0, SPEED)
@@ -117,7 +119,7 @@ func _physics_process(delta):
 			# Step one: get collision point
 			if not was_swinging:
 				was_swinging = true
-				swing_timer.start(swing_time)
+				
 				start_swing_pos = position
 				var swing_point : Vector2 = rope.lastSegment.startPos
 				var radius : float = swing_point.distance_to(start_swing_pos)
@@ -130,15 +132,19 @@ func _physics_process(delta):
 				for i in swing_path_samples + 1:
 					var angle = lerp(-attack_angle, attack_angle, float(i) / swing_path_samples)
 					swing_path.curve.add_point(swing_point + (Vector2.DOWN * radius).rotated(angle))
+				
+				# Step one point eight: set time, longer if it's a longer curve
+				current_swing_time = swing_time + sqrt(radius) / 30
+				swing_timer.start(current_swing_time)
 			
 			# Step two: get path by sampling
-			var sample : float = swing_curve.sample(lerp(1, 0, swing_timer.time_left / swing_time))
+			var sample : float = swing_curve.sample(lerp(1, 0, swing_timer.time_left / current_swing_time))
 			swing_path_follow.progress_ratio = sample
 			var target_pos = swing_path_follow.position
 			
-			# TODO: only test collision, then reset and apply as velocity
-			move_and_collide(target_pos - position, false, 5)
-			# set velocity to change in angle
+			# TODO: visual jitter when moving fast
+			targetVelocity = (target_pos - position) / delta
+			# move_and_collide(target_pos - position, false, 5)
 			
 		"wall_slide":
 			# move left and right depending on air curve
@@ -164,12 +170,13 @@ func _physics_process(delta):
 			pass
 	
 	# add momentum when holding direction
-	if input_direction < 0: # moving left
-		if velocity.x < targetVelocity.x:
-			targetVelocity.x = velocity.x
-	if input_direction > 0: # moving right
-		if velocity.x > targetVelocity.x:
-			targetVelocity.x = velocity.x
+	if currAnimationNode != "Swing_2D":
+		if input_direction < 0: # moving left
+			if velocity.x < targetVelocity.x:
+				targetVelocity.x = velocity.x
+		if input_direction > 0: # moving right
+			if velocity.x > targetVelocity.x:
+				targetVelocity.x = velocity.x
 	
 	# step three: smooth to target velocity
 	velocity = lerp(velocity, targetVelocity, smoothFactor)
