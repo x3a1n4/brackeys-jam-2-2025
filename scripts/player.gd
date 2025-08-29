@@ -22,9 +22,25 @@ var jump_count = max_jump_count
 @onready var wall_slide_timer : Timer = $"Timers/Wall Slide Timer"
 var was_on_wall : bool = false
 
+@export var swing_curve: Curve
+@export var swing_time = 0.2
+@onready var swing_timer : Timer = $"Timers/Swing Timer"
+var was_swinging : bool = false
+var start_swing_pos : Vector2 = Vector2.ZERO
+
 @onready var animationTree : AnimationTree = $AnimationTree
 @onready var animationStateMachinePlayback : AnimationNodeStateMachinePlayback = animationTree.get("parameters/playback")
 
+@onready var rope : Rope2D = get_parent().get_node("Rope")
+@onready var swing_path : Path2D = $"Swing Path"
+@onready var swing_path_follow : PathFollow2D = $"Swing Path/PathFollow2D"
+@export var swing_path_samples : int = 100
+
+func _ready():
+	# unparent path
+	remove_child(swing_path)
+	get_tree().get_root().add_child.call_deferred(swing_path)
+	
 func sampleSymCurve(curve : Curve, sample : float):
 	if sample < 0:
 		return -curve.sample(-sample)
@@ -58,6 +74,7 @@ func _physics_process(delta):
 	animationTree.set("parameters/conditions/Not ground", not is_on_floor())
 	animationTree.set("parameters/conditions/jump", is_jumpting)
 	animationTree.set("parameters/conditions/swing", input_hold)
+	animationTree.set("parameters/conditions/Not Swing", not input_hold)
 	animationTree.set("parameters/conditions/wall", is_on_wall_only())
 	animationTree.set("parameters/conditions/Not Wall", not is_on_wall_only())
 	# step two point five: set blend positions
@@ -80,6 +97,9 @@ func _physics_process(delta):
 			
 			# set max jumps
 			jump_count = max_jump_count
+			
+			was_on_wall = false
+			was_swinging = false
 		"Air_2D":
 			# move left and right depending on air curve
 			targetVelocity.x = sampleSymCurve(air_curve, input_direction) * GLOBAL_MULT
@@ -90,10 +110,36 @@ func _physics_process(delta):
 			# we're not on a wall
 			was_on_wall = false
 			smoothFactor = 0.2
+			
+			# we're not in the air
+			was_swinging = false
 		"Swing_2D":
-			# Step one: get collision point:
-			# Step two: move in arc from collision point
-			pass # TODO: write this section
+			# Step one: get collision point
+			if not was_swinging:
+				was_swinging = true
+				swing_timer.start(swing_time)
+				start_swing_pos = position
+				var swing_point : Vector2 = rope.lastSegment.startPos
+				var radius : float = swing_point.distance_to(start_swing_pos)
+				
+				var attack_angle : float = Vector2.DOWN.angle_to(position - swing_point)
+				
+				# Step one point five: set up path
+				# 	setup path as circle
+				swing_path.curve.clear_points()
+				for i in swing_path_samples + 1:
+					var angle = lerp(-attack_angle, attack_angle, float(i) / swing_path_samples)
+					swing_path.curve.add_point(swing_point + (Vector2.DOWN * radius).rotated(angle))
+			
+			# Step two: get path by sampling
+			var sample : float = swing_curve.sample(lerp(1, 0, swing_timer.time_left / swing_time))
+			swing_path_follow.progress_ratio = sample
+			var target_pos = swing_path_follow.position
+			
+			# TODO: only test collision, then reset and apply as velocity
+			move_and_collide(target_pos - position, false, 5)
+			# set velocity to change in angle
+			
 		"wall_slide":
 			# move left and right depending on air curve
 			# in practice, this will not do anything but push into the wall
@@ -116,6 +162,15 @@ func _physics_process(delta):
 			targetVelocity.y = -jump_curve.sample(lerp(1, 0, jump_timer.time_left / jump_time)) * GLOBAL_MULT
 		_:
 			pass
+	
+	# add momentum when holding direction
+	if input_direction < 0: # moving left
+		if velocity.x < targetVelocity.x:
+			targetVelocity.x = velocity.x
+	if input_direction > 0: # moving right
+		if velocity.x > targetVelocity.x:
+			targetVelocity.x = velocity.x
+	
 	# step three: smooth to target velocity
 	velocity = lerp(velocity, targetVelocity, smoothFactor)
 	# step four: flip player if moving left
@@ -127,8 +182,5 @@ func _physics_process(delta):
 	move_and_slide()
 	
 	# step five: handle rope
-	if get_parent().get_node("Rope"):
-		get_parent().get_node("Rope").endPoint = $"Visual/Rope Attach Point".global_position
-	
-	# DEBUG
-	#print(velocity)
+	rope.endPoint = $"Visual/Rope Attach Point".global_position
+	# rope.slack = jump_count == 0 # set slack if can't jump

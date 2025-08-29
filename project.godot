@@ -64,3 +64,7 @@ Player_Dash={
 2d_physics/layer_1="Collision"
 2d_physics/layer_2="Hurt"
 2d_physics/layer_3="Rope Interact"
+
+[rendering]
+
+textures/canvas_textures/default_texture_repeat=1

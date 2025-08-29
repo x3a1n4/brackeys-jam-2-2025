@@ -19,5 +19,6 @@ func _ready():
 func _physics_process(delta):
 	# Step 1: update positions
 	lastSegment.targetEndPos = endPoint
+	lastSegment.slack = slack
 	lastSegment.process_physics(delta)
 	# gets a y of 0 for some reason?

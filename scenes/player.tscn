@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://cv5fhuqb640mg"]
+[gd_scene load_steps=77 format=3 uid="uid://cv5fhuqb640mg"]
 
 [ext_resource type="Texture2D" uid="uid://dyilspd1wyf47" path="res://assets/player/idle_stand.png" id="1_3vyb7"]
 [ext_resource type="Texture2D" uid="uid://skwfft5rafxr" path="res://assets/player/air_fall.png" id="1_ur7pv"]
@@ -12,8 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://dhnutp26ifj3g" path="res://assets/player/wall_slide.png" id="9_a8ls1"]
 
 [sub_resource type="Curve" id="Curve_y4r1p"]
-_limits = [0.0, 2.0, 0.0, 1.0]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 2.67974), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_d2wvv"]
@@ -34,6 +34,10 @@ point_count = 3
 [sub_resource type="Curve" id="Curve_jej6c"]
 _limits = [-1.0, 0.0, 0.0, 1.0]
 _data = [Vector2(0, -0.0513834), 0.0, 0.0, 0, 0, Vector2(0.838875, -0.083498), 0.0, 0.0, 0, 0, Vector2(1, -1), -8.37707, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_oprun"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.505967, 0), -0.12193, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_u8vuu"]
@@ -325,6 +329,10 @@ advance_condition = &"ground"
 advance_mode = 2
 advance_condition = &"Not ground"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_l71n6"]
+advance_mode = 2
+advance_condition = &"Not Swing"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_3vyb7"]
 states/Air_2D/node = SubResource("AnimationNodeBlendSpace2D_3vyb7")
 states/Air_2D/position = Vector2(770, 157)
@@ -344,8 +352,8 @@ states/jump_wall/node = SubResource("AnimationNodeAnimation_tuyoq")
 states/jump_wall/position = Vector2(996, 300)
 states/wall_slide/node = SubResource("AnimationNodeAnimation_fjrip")
 states/wall_slide/position = Vector2(770, 300)
-transitions = ["Start", "Run_1D", SubResource("AnimationNodeStateMachineTransition_smehm"), "Run_1D", "jump_ground", SubResource("AnimationNodeStateMachineTransition_ur7pv"), "wall_slide", "jump_wall", SubResource("AnimationNodeStateMachineTransition_y4r1p"), "jump_ground", "Air_2D", SubResource("AnimationNodeStateMachineTransition_d2wvv"), "jump_swing", "Air_2D", SubResource("AnimationNodeStateMachineTransition_3v2ag"), "Swing_2D", "jump_swing", SubResource("AnimationNodeStateMachineTransition_jej6c"), "Air_2D", "wall_slide", SubResource("AnimationNodeStateMachineTransition_f1ej7"), "jump_wall", "Air_2D", SubResource("AnimationNodeStateMachineTransition_oprun"), "Air_2D", "jump_double", SubResource("AnimationNodeStateMachineTransition_a8ls1"), "jump_double", "Air_2D", SubResource("AnimationNodeStateMachineTransition_qfm1y"), "Air_2D", "Swing_2D", SubResource("AnimationNodeStateMachineTransition_fulsm"), "Air_2D", "End", SubResource("AnimationNodeStateMachineTransition_4r5pv"), "Air_2D", "Run_1D", SubResource("AnimationNodeStateMachineTransition_60mlk"), "wall_slide", "Air_2D", SubResource("AnimationNodeStateMachineTransition_i4ail"), "wall_slide", "Run_1D", SubResource("AnimationNodeStateMachineTransition_a38lo"), "Run_1D", "Air_2D", SubResource("AnimationNodeStateMachineTransition_4ni07")]
-graph_offset = Vector2(85, -16)
+transitions = ["Start", "Run_1D", SubResource("AnimationNodeStateMachineTransition_smehm"), "Run_1D", "jump_ground", SubResource("AnimationNodeStateMachineTransition_ur7pv"), "wall_slide", "jump_wall", SubResource("AnimationNodeStateMachineTransition_y4r1p"), "jump_ground", "Air_2D", SubResource("AnimationNodeStateMachineTransition_d2wvv"), "jump_swing", "Air_2D", SubResource("AnimationNodeStateMachineTransition_3v2ag"), "Swing_2D", "jump_swing", SubResource("AnimationNodeStateMachineTransition_jej6c"), "Air_2D", "wall_slide", SubResource("AnimationNodeStateMachineTransition_f1ej7"), "jump_wall", "Air_2D", SubResource("AnimationNodeStateMachineTransition_oprun"), "Air_2D", "jump_double", SubResource("AnimationNodeStateMachineTransition_a8ls1"), "jump_double", "Air_2D", SubResource("AnimationNodeStateMachineTransition_qfm1y"), "Air_2D", "Swing_2D", SubResource("AnimationNodeStateMachineTransition_fulsm"), "Air_2D", "End", SubResource("AnimationNodeStateMachineTransition_4r5pv"), "Air_2D", "Run_1D", SubResource("AnimationNodeStateMachineTransition_60mlk"), "wall_slide", "Air_2D", SubResource("AnimationNodeStateMachineTransition_i4ail"), "wall_slide", "Run_1D", SubResource("AnimationNodeStateMachineTransition_a38lo"), "Run_1D", "Air_2D", SubResource("AnimationNodeStateMachineTransition_4ni07"), "Swing_2D", "Air_2D", SubResource("AnimationNodeStateMachineTransition_l71n6")]
+graph_offset = Vector2(8, 8)
 
 [sub_resource type="Animation" id="Animation_ujl30"]
 length = 0.001
@@ -1275,6 +1283,12 @@ _data = {
 &"wall_slide": SubResource("Animation_ke2ow")
 }
 
+[sub_resource type="Curve2D" id="Curve2D_y4r1p"]
+_data = {
+"points": PackedVector2Array(-2.59725, -21.5932, 2.59725, 21.5932, 0, 0)
+}
+point_count = 1
+
 [node name="Player" type="CharacterBody2D"]
 safe_margin = 5.0
 script = ExtResource("1_y4r1p")
@@ -1286,6 +1300,8 @@ fall_curve = SubResource("Curve_f1ej7")
 fall_time = 0.4
 wall_slide_curve = SubResource("Curve_jej6c")
 wall_slide_time = 5.0
+swing_curve = SubResource("Curve_oprun")
+swing_time = 1.5
 
 [node name="Visual" type="Node2D" parent="."]
 
@@ -1318,6 +1334,7 @@ debug_color = Color(0.95521, 9.62615e-07, 0.544408, 0.42)
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeStateMachine_3vyb7")
 anim_player = NodePath("../AnimationPlayer")
+"parameters/conditions/Not Swing" = false
 "parameters/conditions/Not Wall" = false
 "parameters/conditions/Not ground" = false
 parameters/conditions/ground = false
@@ -1343,3 +1360,14 @@ one_shot = true
 
 [node name="Fall Timer" type="Timer" parent="Timers"]
 one_shot = true
+
+[node name="Swing Timer" type="Timer" parent="Timers"]
+
+[node name="Swing Path" type="Path2D" parent="."]
+curve = SubResource("Curve2D_y4r1p")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Swing Path"]
+rotation = 1.45109
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
+remote_path = NodePath("../Swing Path")
