@@ -21,6 +21,19 @@ var line_length : float = 0.0
 
 const ropeSegment = preload("res://scenes/rope/rope_segment.tscn") 
 
+func collide(collision : Dictionary):
+	var splitPoint : Vector2 = collision.position
+	var splitNormal : Vector2 = collision.normal
+	
+	# set segment one to be between the two
+	var static_segment = ropeSegment.instantiate()
+	static_segment.startPos = startPos
+	static_segment.endPos = splitPoint
+	get_parent().add_child(static_segment)
+	
+	# set segment two to go to the player
+	targetStartPos = splitPoint
+
 # TODO: add drawing and animation for hanging rope
 func _process(_delta):	
 	var points : Array[Vector2] = []
@@ -75,19 +88,7 @@ func process_physics(_delta):
 			# and sort by closest to player
 			collisions.sort_custom(func(a, b): return endPos.distance_to(a.position) < endPos.distance_to(b.position))
 			
-			var splitPoint : Vector2 = collisions[0].position
-			var splitNormal : Vector2 = collisions[0].normal
-			
-			# set segment one to be between the two
-			var static_segment = ropeSegment.instantiate()
-			static_segment.startPos = startPos
-			static_segment.endPos = splitPoint
-			get_parent().add_child(static_segment)
-			# DEBUG!
-			static_segment.get_node("DrawLine").default_color = Color.WHITE
-			
-			# set segment two to go to the player
-			targetStartPos = splitPoint
+			collide(collisions[0])
 	
 	# update position
 	startPos = targetStartPos

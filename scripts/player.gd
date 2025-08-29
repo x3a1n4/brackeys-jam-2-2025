@@ -37,6 +37,8 @@ var start_swing_pos : Vector2 = Vector2.ZERO
 @onready var swing_path_follow : PathFollow2D = $"Swing Path/PathFollow2D"
 @export var swing_path_samples : int = 100
 
+@onready var dash_detection_area : Area2D = $"Dash Detection Area"
+
 func _ready():
 	# unparent path
 	remove_child(swing_path)
@@ -53,8 +55,7 @@ func _physics_process(delta):
 	# step one: get inputs
 	var input_direction : float = Input.get_axis("Player_Left", "Player_Right")
 	var input_jump : bool = Input.is_action_just_pressed("Player_Jump")
-	var input_dash : bool = Input.is_action_pressed("Player_Dash")
-	var input_dash_release : bool = Input.is_action_just_released("Player_Dash")
+	var input_dash : bool = Input.is_action_just_pressed("Player_Dash")
 	var input_hold : bool = Input.is_action_pressed("Player_Hold")
 	
 	# handle jump logic here, why not? TODO: move somewhere better
@@ -169,18 +170,54 @@ func _physics_process(delta):
 		_:
 			pass
 	
+	# STEP four: handle dashing
+	# input_dash
+	#	are we in area
+	if dash_detection_area.get_overlapping_areas().any(func(a: Area2D): return a.is_in_group("hook area")):
+		# if so, draw particles
+		var hook : HookElement = dash_detection_area.get_overlapping_areas() 	\
+			.filter(func(a: Area2D): return a.is_in_group("hook area")) 		\
+			[0] 																\
+			.get_parent()
+			
+		var dash_dest_pos = hook.attach_point + (hook.attach_point - $"Dash Line Attach".global_position)
+		
+		# update line
+		$"Dash Line Attach/Dash Line".points[0] = $"Dash Line Attach/Dash Line".to_local($"Dash Line Attach".global_position)
+		$"Dash Line Attach/Dash Line".points[1] = $"Dash Line Attach/Dash Line".to_local(dash_dest_pos)
+		$"Dash Line Attach/Dash Line".visible = true
+		
+		# can we dash?
+		if input_dash:
+			# dash
+			targetVelocity = (dash_dest_pos - position) / delta / 3
+			smoothFactor = 1
+			print("Dash")
+			
+			# set jumps
+			jump_count = 1
+			
+			# update rope
+			rope.lastSegment.collide({"position": hook.attach_point, "normal": hook.transform.y.normalized()})
+			
+			# consume hold input
+			Input.action_release("Player_Hold")
+	else:
+		$"Dash Line Attach/Dash Line".visible = false
+			
 	# add momentum when holding direction
 	if currAnimationNode != "Swing_2D":
 		if input_direction < 0: # moving left
 			if velocity.x < targetVelocity.x:
-				targetVelocity.x = velocity.x
+				targetVelocity.x = lerp(velocity.x, targetVelocity.x, 0.4)
 		if input_direction > 0: # moving right
 			if velocity.x > targetVelocity.x:
-				targetVelocity.x = velocity.x
+				targetVelocity.x = lerp(velocity.x, targetVelocity.x, 0.4)
 	
 	# step three: smooth to target velocity
 	velocity = lerp(velocity, targetVelocity, smoothFactor)
-	# step four: flip player if moving left
+	
+	# step five: flip player if moving left
 	if velocity.x < -0.2:
 		$Visual.scale.x = -1
 	if velocity.x > 0.2:
@@ -188,6 +225,6 @@ func _physics_process(delta):
 	
 	move_and_slide()
 	
-	# step five: handle rope
+	# step six: handle rope
 	rope.endPoint = $"Visual/Rope Attach Point".global_position
 	# rope.slack = jump_count == 0 # set slack if can't jump

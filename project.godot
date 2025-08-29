@@ -28,6 +28,10 @@ version_control/autoload_on_startup=true
 
 enabled=PackedStringArray("res://addons/AS2P/plugin.cfg", "res://addons/debugdraw2d/plugin.cfg")
 
+[global_group]
+
+"hook area"="area2d for hooks"
+
 [input]
 
 Player_Left={

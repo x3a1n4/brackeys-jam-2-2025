@@ -40,9 +40,6 @@ point_count = 3
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.505967, 0), -0.12193, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="Gradient" id="Gradient_y4r1p"]
-colors = PackedColorArray(0.709804, 0.709804, 0.709804, 0.513726, 0, 0.733333, 0.737255, 0.647059)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_u8vuu"]
 animations = [{
 "frames": [{
@@ -184,6 +181,9 @@ animations = [{
 "name": &"wall_slide",
 "speed": 5.0
 }]
+
+[sub_resource type="Gradient" id="Gradient_y4r1p"]
+colors = PackedColorArray(0.709804, 0.709804, 0.709804, 0.513726, 0, 0.733333, 0.737255, 0.647059)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_y4r1p"]
 size = Vector2(20, 20)
@@ -1317,16 +1317,6 @@ wall_slide_time = 5.0
 swing_curve = SubResource("Curve_oprun")
 swing_time = 1.5
 
-[node name="Dash Line Attach" type="Node2D" parent="."]
-position = Vector2(0, -106)
-
-[node name="Dash Line" type="Line2D" parent="Dash Line Attach"]
-points = PackedVector2Array(0, 0, 30, 0)
-gradient = SubResource("Gradient_y4r1p")
-joint_mode = 2
-begin_cap_mode = 2
-end_cap_mode = 2
-
 [node name="Visual" type="Node2D" parent="."]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visual"]
@@ -1335,6 +1325,16 @@ scale = Vector2(0.541016, 0.541016)
 sprite_frames = SubResource("SpriteFrames_u8vuu")
 animation = &"idle_stand"
 autoplay = "idle_stand"
+
+[node name="Dash Line Attach" type="Node2D" parent="Visual"]
+position = Vector2(0, -106)
+
+[node name="Dash Line" type="Line2D" parent="Visual/Dash Line Attach"]
+points = PackedVector2Array(0, 0, 30, 0)
+gradient = SubResource("Gradient_y4r1p")
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
 
 [node name="Rope Attach Point" type="Node2D" parent="Visual"]
 position = Vector2(19, -141)

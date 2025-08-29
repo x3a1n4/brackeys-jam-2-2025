@@ -1,18 +1,30 @@
-[gd_scene load_steps=3 format=3 uid="uid://batrr8wiq3666"]
+[gd_scene load_steps=5 format=3 uid="uid://batrr8wiq3666"]
 
 [ext_resource type="Texture2D" uid="uid://dkw8yxrh5s54a" path="res://assets/level elements/hookmockup.png" id="1_p5w6b"]
+[ext_resource type="Script" uid="uid://dyc5p7fpajwod" path="res://scenes/hook.gd" id="2_lmb2r"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lmb2r"]
-radius = 239.708
+radius = 380.021
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qfoqi"]
 
 [node name="Hook" type="Sprite2D"]
 texture = ExtResource("1_p5w6b")
 offset = Vector2(0, -128)
+script = ExtResource("2_lmb2r")
 
-[node name="In Range" type="Area2D" parent="."]
+[node name="In Range" type="Area2D" parent="." groups=["hook area"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="In Range"]
-position = Vector2(-2, -158)
+position = Vector2(0, -158)
 shape = SubResource("CircleShape2D_lmb2r")
 
 [node name="Particle Burst" type="GPUParticles2D" parent="."]
+
+[node name="Attach Point" type="StaticBody2D" parent="."]
+position = Vector2(0, -158)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attach Point"]
+shape = SubResource("CircleShape2D_qfoqi")
