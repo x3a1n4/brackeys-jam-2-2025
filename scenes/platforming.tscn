@@ -8,11 +8,13 @@
 
 [node name="Player" parent="." instance=ExtResource("3_b32bi")]
 position = Vector2(-4, -111)
+GLOBAL_MULT = 400
 jump_time = 0.4
 max_jump_count = 1
 fall_time = 1.1
 wall_slide_time = 2.0
 swing_time = 2.0
+swing_path_samples = 100
 
 [node name="Main Camera" type="Camera2D" parent="Player"]
 position = Vector2(-2, -4)

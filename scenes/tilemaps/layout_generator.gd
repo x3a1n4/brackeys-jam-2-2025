@@ -3,7 +3,7 @@ class_name LayoutGenerator
 extends Node2D
 
 @export_range(0, 100) var difficulty : float = 0
-@export_range(10, 30) var iters : int = 10
+@export_range(10, 30) var iters : int = 20
 
 @onready var tileLibrary : Node2D = load("res://scenes/tilemaps/tile_library.tscn").instantiate()
 
@@ -43,12 +43,14 @@ func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vecto
 				return a.get_used_cells().any(func(b : Vector2i):
 					return a.get_cell_tile_data(b).get_custom_data("type") == targetType
 				))
+		
 		# Step 4.1: sort by proximity to difficulty
+		var targetDifficulty : float = difficulty + randf_range(-10, 10) # add some randomness to difficulty
+		potentialTileElements.shuffle() # add some randomness to tiles
 		potentialTileElements.sort_custom(func(a : TileLibraryElement, b : TileLibraryElement):
-			return abs(a.difficulty - difficulty) < abs(b.difficulty - difficulty)
+			return abs(a.difficulty - targetDifficulty) < abs(b.difficulty - targetDifficulty) # add some randomness
 			)
 			
-		
 		# Step 5: for each potential, place to see if there are any overlaps
 		for potentialTileElement : TileLibraryElement in potentialTileElements:
 			# get the start position(s)
@@ -62,6 +64,7 @@ func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vecto
 				# TODO: check for collisions!
 				var newTileElement : TileLibraryElement = potentialTileElement.duplicate()
 				newTileElement.position = (exitTile - potentialEnterTile) * 128
+				newTileElement.visible = true
 				tileElement.add_child(newTileElement)
 				
 				addTiles(newTileElement, depth + 1, potentialEnterTile)

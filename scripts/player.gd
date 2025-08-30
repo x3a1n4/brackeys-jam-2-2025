@@ -54,6 +54,7 @@ var wall_side = Vector2(0, 0)
 func _physics_process(delta):
 	# step one: get inputs
 	var input_direction : float = Input.get_axis("Player_Left", "Player_Right")
+	var input_down : bool = Input.is_action_pressed("Player_Down")
 	var input_jump : bool = Input.is_action_just_pressed("Player_Jump")
 	var input_dash : bool = Input.is_action_just_pressed("Player_Dash")
 	var input_hold : bool = Input.is_action_pressed("Player_Hold")
@@ -84,6 +85,8 @@ func _physics_process(delta):
 	animationTree.set("parameters/Run_1D/blend_position", get_real_velocity().x / GLOBAL_MULT)
 	animationTree.set("parameters/Swing_2D/blend_position", Vector2(0, 0)) # NOTE: fix this if adding sprites
 	
+	# handle head hitting
+	var hit_head = is_on_ceiling()
 	
 	# step three: based on animation state, control movement
 	var targetVelocity : Vector2 = Vector2.ZERO
@@ -109,6 +112,10 @@ func _physics_process(delta):
 			
 			# fall according to jump
 			targetVelocity.y = -jump_curve.sample(lerp(1, 0, jump_timer.time_left / jump_time)) * GLOBAL_MULT
+			
+			# handle head hitting
+			if hit_head:
+				jump_timer.start(0.1)
 			
 			# we're not on a wall
 			was_on_wall = false
@@ -154,6 +161,10 @@ func _physics_process(delta):
 			
 			targetVelocity.y = -wall_slide_curve.sample(lerp(1, 0, wall_slide_timer.time_left / wall_slide_time)) * GLOBAL_MULT
 			
+			# if down, move away from the wall
+			if input_down:
+				input_direction = wall_side.x
+				targetVelocity.x = wall_side.x
 			# set max jumps
 			jump_count = max_jump_count
 		
@@ -167,6 +178,10 @@ func _physics_process(delta):
 			
 			# fall according to jump
 			targetVelocity.y = -jump_curve.sample(lerp(1, 0, jump_timer.time_left / jump_time)) * GLOBAL_MULT
+			
+			# if we hit head, set timer to when it's going down
+			if hit_head:
+				jump_timer.start(0.1)
 		_:
 			pass
 	
@@ -227,4 +242,6 @@ func _physics_process(delta):
 	
 	# step six: handle rope
 	rope.endPoint = $"Visual/Rope Attach Point".global_position
+	# also handle jump indicator
+	$"Visual/Jump Indicator".frame = jump_count
 	# rope.slack = jump_count == 0 # set slack if can't jump

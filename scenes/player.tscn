@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://cv5fhuqb640mg"]
+[gd_scene load_steps=84 format=3 uid="uid://cv5fhuqb640mg"]
 
 [ext_resource type="Texture2D" uid="uid://dyilspd1wyf47" path="res://assets/player/idle_stand.png" id="1_3vyb7"]
 [ext_resource type="Texture2D" uid="uid://skwfft5rafxr" path="res://assets/player/air_fall.png" id="1_ur7pv"]
@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://cicfhsl2bttvi" path="res://assets/player/run02.png" id="7_f1ej7"]
 [ext_resource type="Texture2D" uid="uid://dmgb6gy26p310" path="res://assets/player/hang.png" id="8_oprun"]
 [ext_resource type="Texture2D" uid="uid://dhnutp26ifj3g" path="res://assets/player/wall_slide.png" id="9_a8ls1"]
+[ext_resource type="Texture2D" uid="uid://bhk8ij7hd84xu" path="res://assets/player/jump_indicator_empty.png" id="11_3v2ag"]
+[ext_resource type="Texture2D" uid="uid://cy28srwmevxw8" path="res://assets/player/jump_indicator_filled.png" id="12_jej6c"]
 
 [sub_resource type="Curve" id="Curve_y4r1p"]
 _limits = [0.0, 3.0, 0.0, 1.0]
@@ -187,6 +189,20 @@ animations = [{
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_y4r1p"]
 size = Vector2(20, 20)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f1ej7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_jej6c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_3v2ag")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_u8vuu"]
 radius = 28.0
@@ -1309,7 +1325,7 @@ script = ExtResource("1_y4r1p")
 ground_curve = SubResource("Curve_y4r1p")
 air_curve = SubResource("Curve_d2wvv")
 jump_curve = SubResource("Curve_3v2ag")
-jump_time = 5.0
+jump_time = 0.4
 fall_curve = SubResource("Curve_f1ej7")
 fall_time = 0.4
 wall_slide_curve = SubResource("Curve_jej6c")
@@ -1342,6 +1358,11 @@ position = Vector2(19, -141)
 [node name="Sprite2D" type="Sprite2D" parent="Visual/Rope Attach Point"]
 visible = false
 texture = SubResource("PlaceholderTexture2D_y4r1p")
+
+[node name="Jump Indicator" type="AnimatedSprite2D" parent="Visual"]
+position = Vector2(0, -255)
+scale = Vector2(0.375, 0.375)
+sprite_frames = SubResource("SpriteFrames_f1ej7")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -97)
