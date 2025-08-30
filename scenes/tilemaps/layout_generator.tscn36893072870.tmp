@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=4 uid="uid://dpsqurors38hl"]
+
+[ext_resource type="Script" uid="uid://b7y7o0mq1me6s" path="res://scenes/tilemaps/layout_generator.gd" id="1_1oi0g"]
+[ext_resource type="PackedScene" uid="uid://cvmp6khh45n8x" path="res://scenes/tilemaps/tile_library_element.tscn" id="2_tvmx5"]
+
+[node name="LayoutGenerator" type="Node2D"]
+script = ExtResource("1_1oi0g")
+
+[node name="Start" parent="." instance=ExtResource("2_tvmx5")]
+tile_map_data = PackedByteArray("AAABAP//AAAAAAAAAAD5//3/AAAAAAAAAAD5//v/AAAAAAAAAAABAP3/AAAAAAQAAAABAPv/AAAAAAAAAAABAPr/AAAAAAAAAAAAAPr/AAACAAIAAAD///r/AAACAAIAAAD///n/AAAAAAAAAAAAAPn/AAAAAAAAAAABAPn/AAAAAAAAAAD7//n/AAAAAAAAAAD7//r/AAACAAIAAAD6//r/AAACAAIAAAD6//n/AAAAAAAAAAD5//n/AAAAAAAAAAD5//r/AAAAAAAAAAD5////AAAAAAAAAAD8//n/AAAAAAAAAAD9//n/AAAAAAAAAAD+//n/AAAAAAAAAAD5//z/AAAAAAAAAAD5//7/AAAAAAAAAAAAAP//AAAAAAAAAAD/////AAAAAAAAAAD+////AAAAAAAAAAD9////AAAAAAAAAAD8////AAAAAAAAAAD7////AAAAAAAAAAD6////AAAAAAAAAAA=")
+difficulty = 0.0
+
+[node name="DEBUG CAMERA" type="Camera2D" parent="."]
+zoom = Vector2(0.1, 0.1)

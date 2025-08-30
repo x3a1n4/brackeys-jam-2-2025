@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=4 uid="uid://bakq60ubgf045"]
+
+[ext_resource type="PackedScene" uid="uid://cvmp6khh45n8x" path="res://scenes/tilemaps/tile_library_element.tscn" id="1_wdpeh"]
+
+[node name="Tile Library" type="Node2D"]
+
+[node name="Hallway" parent="." instance=ExtResource("1_wdpeh")]
+tile_map_data = PackedByteArray("AAD9/wIAAAAAAAAAAAD+/wIAAAAAAAAAAAD//wIAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAADAP7/AAAAAAAAAAACAP7/AAAAAAAAAAABAP7/AAAAAAAAAAAAAP7/AAAAAAAAAAD///7/AAAAAAAAAAD+//7/AAAAAAAAAAD9//7/AAAAAAAAAAD9/wAAAAAAAAMAAAADAAAAAAAAAAQAAAA=")

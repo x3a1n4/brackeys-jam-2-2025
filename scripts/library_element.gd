@@ -1,10 +1,13 @@
-class_name TileGenerator
+class_name TileLibraryElement
 
-extends Node2D
+extends TileMapLayer
+
+@export_range(0, 100) var difficulty : float
 
 @onready var tile_map : TileMapLayer = $"Tile Map"
-@onready var physics_map : TileMapLayer = $"Physics Map"
+@onready var physics_map : TileMapLayer = $"."
 
+#region Tiling
 func set_corner(dict : Dictionary[Vector2i, String], loc : Vector2i, index : int):
 	dict.get_or_add(loc, "0000")
 	var array = dict[loc].split()
@@ -60,8 +63,6 @@ func _ready():
 		set_corner(corners, loc + Vector2i(0, 1), 1)
 		set_corner(corners, loc + Vector2i(1, 1), 0)
 	
-	print(corners)
-	
 	# for each item in corners, create that tile map
 	# STEP 3: tile
 	for tile_pos in corners:
@@ -69,7 +70,9 @@ func _ready():
 		if tile_atlas_coords != Vector2i(-1, -1):
 			tile_map.set_cell(tile_pos, 0, tile_atlas_coords)
 	
-	# STEP 4: hide tool tiles
+	# STEP 4: add new tiles from library to ends
+	
+	# STEP 5: hide tool tiles
 	for tile in physics_map.get_used_cells():
 		match physics_map.get_cell_tile_data(tile).get_custom_data("type"):
 			"block":
@@ -77,7 +80,3 @@ func _ready():
 				physics_map.set_cell(tile, 0, Vector2i(6, 0))
 			"exit_bottom", "exit_top", "exit_left", "exit_right":
 				physics_map.set_cell(tile, 0, Vector2i(7, 0))
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass

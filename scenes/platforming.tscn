@@ -1,10 +1,9 @@
-[gd_scene load_steps=8 format=4 uid="uid://ccjhmipohom76"]
+[gd_scene load_steps=7 format=4 uid="uid://ccjhmipohom76"]
 
 [ext_resource type="Texture2D" uid="uid://bgaltp5qpgp1f" path="res://assets/tilemaps/test/kenney_simplified-platformer-pack/Tilesheet/platformPack_tilesheet.png" id="1_sojre"]
 [ext_resource type="PackedScene" uid="uid://batrr8wiq3666" path="res://scenes/hook.tscn" id="2_b60vs"]
 [ext_resource type="PackedScene" uid="uid://cv5fhuqb640mg" path="res://scenes/player.tscn" id="3_b32bi"]
 [ext_resource type="PackedScene" uid="uid://dinan80h1iwes" path="res://scenes/rope.tscn" id="4_8liro"]
-[ext_resource type="PackedScene" uid="uid://euku83ajhsey" path="res://scenes/tilemaps/tile_piece.tscn" id="5_xqk1g"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b60vs"]
 texture = ExtResource("1_sojre")
@@ -183,7 +182,3 @@ show_behind_parent = true
 position = Vector2(-1, -227)
 min_segment_length = 30
 startPoint = Vector2(0, -900)
-
-[node name="Tile Pieces" type="Node2D" parent="."]
-
-[node name="Node2D" parent="Tile Pieces" instance=ExtResource("5_xqk1g")]
