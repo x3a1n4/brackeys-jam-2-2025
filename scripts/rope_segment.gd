@@ -23,7 +23,7 @@ const ropeSegment = preload("res://scenes/rope/rope_segment.tscn")
 
 func collide(collision : Dictionary):
 	var splitPoint : Vector2 = collision.position
-	var splitNormal : Vector2 = collision.normal
+	# var splitNormal : Vector2 = collision.normal
 	
 	# set segment one to be between the two
 	var static_segment = ropeSegment.instantiate()

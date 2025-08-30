@@ -81,7 +81,7 @@ func _physics_process(delta):
 	animationTree.set("parameters/conditions/wall", is_on_wall_only())
 	animationTree.set("parameters/conditions/Not Wall", not is_on_wall_only())
 	# step two point five: set blend positions
-	animationTree.set("parameters/Air_2D/blend_position", Vector2(0, - velocity.y) / GLOBAL_MULT)
+	animationTree.set("parameters/Air_2D/blend_position", Vector2(0, -velocity.y) / GLOBAL_MULT / 1.5)
 	animationTree.set("parameters/Run_1D/blend_position", get_real_velocity().x / GLOBAL_MULT)
 	animationTree.set("parameters/Swing_2D/blend_position", Vector2(0, 0)) # NOTE: fix this if adding sprites
 	
@@ -207,7 +207,6 @@ func _physics_process(delta):
 			# dash
 			targetVelocity = (dash_dest_pos - position) / delta / 3
 			smoothFactor = 1
-			print("Dash")
 			
 			# set jumps
 			jump_count = 1

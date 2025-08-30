@@ -7,6 +7,9 @@ extends Node2D
 
 @onready var tileLibrary : Node2D = load("res://scenes/tilemaps/tile_library.tscn").instantiate()
 
+# store tile offsets
+@onready var existingTileOffsets : Dictionary[TileLibraryElement, Vector2i] = {$"Start Room": Vector2i.ZERO}
+
 func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vector2i):
 	# This is a recursive function
 	# Step 0: if the depth is too big, return 
@@ -42,7 +45,7 @@ func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vecto
 		potentialTileElements = potentialTileElements.filter(func(a : TileLibraryElement):
 				return a.get_used_cells().any(func(b : Vector2i):
 					return a.get_cell_tile_data(b).get_custom_data("type") == targetType
-				))
+				) and a.name != tileElement.name) # can't repeat
 		
 		# Step 4.1: sort by proximity to difficulty
 		var targetDifficulty : float = difficulty + randf_range(-10, 10) # add some randomness to difficulty
@@ -57,24 +60,41 @@ func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vecto
 			var potentialEnterTiles = potentialTileElement.get_used_cells().filter(func(a : Vector2i):
 				return potentialTileElement.get_cell_tile_data(a).get_custom_data("type") == targetType
 				)
-			
 			# for each potential start position
+			var found : bool = false
 			for potentialEnterTile : Vector2i in potentialEnterTiles:
-				
-				# TODO: check for collisions!
+				# add the new tile element in position
 				var newTileElement : TileLibraryElement = potentialTileElement.duplicate()
 				newTileElement.position = (exitTile - potentialEnterTile) * 128
-				newTileElement.visible = true
 				tileElement.add_child(newTileElement)
 				
-				addTiles(newTileElement, depth + 1, potentialEnterTile)
+				# check for collisions
+				var valid = true
+				for existingTileElement : TileLibraryElement in existingTileOffsets.keys():
+					if existingTileElement == tileElement: # it can intersect with self
+						continue
+					
+					var existingRect = existingTileElement.get_used_rect()
+					existingRect.position += existingTileOffsets[existingTileElement]
+					var newRect = newTileElement.get_used_rect()
+					newRect.position += existingTileOffsets[tileElement as TileLibraryElement] + exitTile - potentialEnterTile
+					
+					if existingRect.intersects(newRect):
+						# intersects with a tile, remove!
+						tileElement.remove_child(newTileElement)
+						newTileElement.queue_free()
+						valid = false
+						break
+				
+				if valid:
+					newTileElement.visible = true
+					existingTileOffsets[newTileElement] = existingTileOffsets[tileElement] + exitTile - potentialEnterTile
+					addTiles(newTileElement, depth + 1, potentialEnterTile)
+					found = true
+					break
+			if found:
 				break
-			break
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	addTiles($"Start Room", 0, Vector2i.ZERO)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
