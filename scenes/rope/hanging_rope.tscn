@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bc1h3w3dhk737"]
+
+[ext_resource type="Script" uid="uid://dw4cygyyvspa8" path="res://scenes/rope/hanging_rope.gd" id="1_g0qm4"]
+
+[node name="Hanging Rope" type="Line2D"]
+points = PackedVector2Array(0, 0, 30, 0)
+default_color = Color(0.129558, 0.129559, 0.129558, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_g0qm4")

@@ -1,0 +1,116 @@
+[gd_scene load_steps=9 format=3 uid="uid://ctx122ws18x5o"]
+
+[ext_resource type="Texture2D" uid="uid://drqp5ipos2ek" path="res://assets/level elements/node.png" id="1_oxs65"]
+[ext_resource type="Script" uid="uid://d1p1k67ohy85v" path="res://scenes/goal_node.gd" id="1_ts06r"]
+[ext_resource type="PackedScene" uid="uid://bc1h3w3dhk737" path="res://scenes/rope/hanging_rope.tscn" id="2_8eny5"]
+
+[sub_resource type="Curve" id="Curve_ly78q"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.50348, -1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ts06r"]
+radius = 340.262
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ts06r"]
+size = Vector2(5, 5)
+
+[sub_resource type="Curve" id="Curve_ts06r"]
+_limits = [-1.0, 0.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, -5.16104, 0, 0, Vector2(0.50358, -1), 0.0, 0.0, 0, 0, Vector2(1, 0), 4.83184, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8eny5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_oxs65")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Goal Node" type="Node2D"]
+script = ExtResource("1_ts06r")
+position_curve = SubResource("Curve_ly78q")
+
+[node name="Area2D" type="Area2D" parent="." groups=["hook area"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_ts06r")
+
+[node name="Rope 5" type="Node2D" parent="."]
+position = Vector2(-276, -427)
+
+[node name="Sprite2D" type="Sprite2D" parent="Rope 5"]
+texture = SubResource("PlaceholderTexture2D_ts06r")
+
+[node name="Rope 6" type="Node2D" parent="."]
+position = Vector2(223, -417)
+
+[node name="Sprite2D" type="Sprite2D" parent="Rope 6"]
+texture = SubResource("PlaceholderTexture2D_ts06r")
+
+[node name="Rope 7" type="Node2D" parent="."]
+position = Vector2(346, 433)
+
+[node name="Sprite2D" type="Sprite2D" parent="Rope 7"]
+texture = SubResource("PlaceholderTexture2D_ts06r")
+
+[node name="Rope 8" type="Node2D" parent="."]
+position = Vector2(-421, 265)
+
+[node name="Sprite2D" type="Sprite2D" parent="Rope 8"]
+texture = SubResource("PlaceholderTexture2D_ts06r")
+
+[node name="Hanging Rope" parent="." node_paths=PackedStringArray("start_node", "end_node") instance=ExtResource("2_8eny5")]
+rope_curve = SubResource("Curve_ts06r")
+start_node = NodePath("../Rope Attach/Rope 1")
+end_node = NodePath("../Rope 5")
+
+[node name="Hanging Rope2" parent="." node_paths=PackedStringArray("start_node", "end_node") instance=ExtResource("2_8eny5")]
+rope_curve = SubResource("Curve_ts06r")
+start_node = NodePath("../Rope Attach/Rope 2")
+end_node = NodePath("../Rope 6")
+
+[node name="Hanging Rope3" parent="." node_paths=PackedStringArray("start_node", "end_node") instance=ExtResource("2_8eny5")]
+rope_curve = SubResource("Curve_ts06r")
+start_node = NodePath("../Rope Attach/Rope 3")
+end_node = NodePath("../Rope 7")
+
+[node name="Hanging Rope4" parent="." node_paths=PackedStringArray("start_node", "end_node") instance=ExtResource("2_8eny5")]
+rope_curve = SubResource("Curve_ts06r")
+start_node = NodePath("../Rope Attach/Rope 4")
+end_node = NodePath("../Rope 8")
+
+[node name="Rope Attach" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Rope Attach"]
+position = Vector2(0, -3)
+sprite_frames = SubResource("SpriteFrames_8eny5")
+
+[node name="Rope 1" type="Node2D" parent="Rope Attach"]
+position = Vector2(-110, -119)
+
+[node name="Rope 2" type="Node2D" parent="Rope Attach"]
+position = Vector2(77, -104)
+
+[node name="Rope 3" type="Node2D" parent="Rope Attach"]
+position = Vector2(91, 11)
+
+[node name="Rope 4" type="Node2D" parent="Rope Attach"]
+position = Vector2(-44, 46)
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Rope Attach"]
+remote_path = NodePath("../../Area2D")
+use_global_coordinates = false
+
+[node name="DEBUG CAMERA" type="Camera2D" parent="."]
+visible = false
+enabled = false
+zoom = Vector2(0.7, 0.7)
+
+[node name="Position" type="Timer" parent="."]
+wait_time = 6.0
+autostart = true

@@ -42,6 +42,9 @@ var dash_velocity : Vector2 = Vector2.ZERO
 
 @onready var dash_detection_area : Area2D = $"Dash Detection Area"
 
+signal win
+signal die
+
 func _ready():
 	# unparent path
 	remove_child(swing_path)
@@ -190,7 +193,7 @@ func _physics_process(delta):
 	#	are we in area
 	if dash_detection_area.get_overlapping_areas().any(func(a: Area2D): return a.is_in_group("hook area")):
 		# if so, draw particles
-		var hook : HookElement = dash_detection_area.get_overlapping_areas() 	\
+		var hook = dash_detection_area.get_overlapping_areas() 	\
 			.filter(func(a: Area2D): return a.is_in_group("hook area")) 		\
 			[0] 																\
 			.get_parent()
@@ -213,6 +216,10 @@ func _physics_process(delta):
 			rope.lastSegment.collide({"position": hook.attach_point, "normal": hook.transform.y.normalized()})
 			# consume hold input
 			Input.action_release("Player_Hold")
+			
+			# if this is a goal node, win!
+			if dash_dest_pos is GoalNode:
+				win.emit()
 		if $"Timers/Dash Timer".time_left > 0:
 			targetVelocity = dash_velocity
 			
@@ -244,3 +251,7 @@ func _physics_process(delta):
 	# also handle jump indicator
 	$"Visual/Jump Indicator".frame = jump_count
 	# rope.slack = jump_count == 0 # set slack if can't jump
+
+func _on_hurtbox_body_entered(body):
+	print("died")
+	die.emit()

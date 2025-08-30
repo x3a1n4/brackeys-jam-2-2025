@@ -12,10 +12,12 @@ extends Node2D
 
 func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vector2i):
 	# This is a recursive function
+	# Step -0.1: sort by proximity to difficulty
+	var targetDifficulty : float = difficulty + randf_range(-5, 5) # add some randomness to difficulty
+		
 	# Step 0: if the depth is too big, return 
 	if depth > iters:
-		# TODO: spawn an endroom here
-		return
+		targetDifficulty = 99
 	
 	# Step 1: for the tileElement, find the exit tiles
 	var exitTiles = tileElement.get_used_cells().filter(func(a : Vector2i):
@@ -47,8 +49,7 @@ func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vecto
 					return a.get_cell_tile_data(b).get_custom_data("type") == targetType
 				) and a.name != tileElement.name) # can't repeat
 		
-		# Step 4.1: sort by proximity to difficulty
-		var targetDifficulty : float = difficulty + randf_range(-10, 10) # add some randomness to difficulty
+		
 		potentialTileElements.shuffle() # add some randomness to tiles
 		potentialTileElements.sort_custom(func(a : TileLibraryElement, b : TileLibraryElement):
 			return abs(a.difficulty - targetDifficulty) < abs(b.difficulty - targetDifficulty) # add some randomness

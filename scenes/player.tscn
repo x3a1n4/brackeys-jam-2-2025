@@ -1372,6 +1372,8 @@ shape = SubResource("CapsuleShape2D_u8vuu")
 one_way_collision_margin = 5.0
 
 [node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(0, -78)
@@ -1427,3 +1429,5 @@ rotation = 1.45109
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
 remote_path = NodePath("../Swing Path")
+
+[connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
