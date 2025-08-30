@@ -5,8 +5,6 @@ var risk : float = 0
 var length : int = 2
 var max_risk : int = 10
 
-var progress : float = 0.0
-
 var lights_on : bool = false
 
 var num_nodes : int = 0
@@ -16,6 +14,8 @@ var died : bool = false
 var dialogue : Resource = load("res://dialogue/main.dialogue")
 
 var transition_rect: ColorRect
+
+var must_use_max_risk : bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

@@ -21,6 +21,15 @@ DebugDraw2D="*res://addons/debugdraw2d/DebugDraw2D.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 Globals="*res://scripts/globals.gd"
 
+[dialogue_manager]
+
+runtime/balloon_path="res://dialogue/baloons/balloon.tscn"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+
 [editor]
 
 version_control/plugin_name="GitPlugin"

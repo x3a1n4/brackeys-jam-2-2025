@@ -2,7 +2,7 @@
 ~ intro
 Nathan: This factory's been shut down for a while. 
 Nathan: Something about safety violations.
-Nathan: Apparently they put 12-inch high spikes anywhere. You're not supposed to do that.
+Nathan: Apparently they put 12 inch spikes everywhere. You're not supposed to do that.
 do Globals.enter_platforming()
 => END
 
@@ -24,6 +24,33 @@ do Globals.enter_home()
 => END
 
 ~ win_inside
+if Globals.max_risk == 100
+	match Globals.risk
+		when < 10
+			Avery: Got another one.
+			Nathan: That just about does it.
+			Nathan: I think I've got access to enough machines that I can flood the system.
+			Nathan: I'll take down anything controlling the locks.
+		when < 50
+			Avery: How about that?
+			Nathan: Oh wow, you have NO idea.
+			Nathan: It's got full backups of password hashes, employee records, and you know what?
+			
+		else
+			Avery: How was that one?
+			Nathan: Wow, how the heck did you survive [i]that[/i]?
+			Nathan: It's an administrator node. I can see the whole system.
+			Nathan: I can get you in as far as I can go.
+	
+	Nathan: [b]Everything is open[/b]
+	Nathan: You've gotta be careful
+	Avery: Well...
+	do Globals.must_use_max_risk = true
+	do Globals.show_risk_popup()
+	Avery: I think I have to risk it for the biscuit.
+	do Globals.enter_platforming()
+	=> END
+
 match Globals.num_nodes
 	when 0
 		do Globals.turn_on_lights()
@@ -44,7 +71,7 @@ match Globals.num_nodes
 		do Globals.enter_platforming()
 	when 2
 		Nathan: Oh, this is interesting
-		Nathan: The nodes are moving [i]away[/i] from us
+		Nathan: The nodes are moving [i]away[/i] from us.
 		Nathan: If we wait too long, there will be too many hallways to traverse.
 		Avery: Every time I go in, the path is a bit longer...
 		Nathan: Exactly. 
@@ -72,6 +99,80 @@ match Globals.num_nodes
 		Avery: I'll try to find some more!
 		do Globals.show_risk_popup()
 		do Globals.enter_platforming()
+	when 6
+		Avery: What did this factory even make anyways?
+		Nathan: No idea.
+		do Globals.show_risk_popup()
+		do Globals.enter_platforming()
+	when 8
+		Avery: So what are all these ...things I'm plugging you into?
+		Nathan: Circuit boards of some kind. But heavily modified. I can't really tell why.
+		Avery: Wow, so they're chips, and
+		Avery: ...modified?
+		Avery: ...not vanilla?
+		Avery: ...
+		Avery: Screw you
+		Nathan: Just wait until hear about how they store browser data.
+		Avery: ...I'm getting another node.
+		do Globals.show_risk_popup()
+		do Globals.enter_platforming()
+	when <12
+		% 
+			Avery: Got another one.
+			Avery: I think I'm getting the hang of this.
+			do Globals.show_risk_popup()
+			do Globals.enter_platforming()
+		%
+			Avery: How's that one?
+			Nathan: Oh, there's a lot of large files here. Training videos maybe?
+			Nathan: It's gonna take me a while to parse through this.
+			Avery: I'll try to find some more!
+			do Globals.show_risk_popup()
+			do Globals.enter_platforming()
+		%	
+			Avery: What was on that one?
+			Nathan: Bad news, looks like it was wiped.
+			Nathan: Good news, the firewall was wiped somehow. I'll see if this one can connect anywhere.
+			Avery: I'll try to find another in the meantime
+			do Globals.show_risk_popup()
+			do Globals.enter_platforming()
+		% [if Globals.max_risk < 30]
+			Nathan: Nice one!
+			Nathan: Hmm, let's see. Some project files, some remote connections but not much
+			Nathan: Wait there's a passwords file!
+			Nathan: Nevermind it's their league of legends password.
+			Avery: They play league at WORK?
+			Nathan: Honestly, the fact it's in a document suggests there's a shared work account.
+			Avery: Oh.
+			Avery: ...
+			Avery: wait WHAT
+			do Globals.show_risk_popup()
+			do Globals.enter_platforming()
+		% [if Globals.max_risk > 70]
+			Nathan: We've gotta be close
+			Nathan: Just a couple more nodes
+			Avery: On it.
+			do Globals.show_risk_popup()
+			do Globals.enter_platforming()
+	else
+		% 
+			Avery: Got another one.
+			Avery: I think I'm getting the hang of this.
+			do Globals.show_risk_popup()
+			do Globals.enter_platforming()
+		%
+			Nathan: Nice one!
+			Avery: I'm going back in.
+			do Globals.show_risk_popup()
+			do Globals.enter_platforming()
+		%
+			Avery: Here you go!
+			do Globals.show_risk_popup()
+			do Globals.enter_platforming()
+		%
+			Avery: Whew. This is pretty tricky!
+			do Globals.show_risk_popup()
+			do Globals.enter_platforming()
 => END
 
 ~ death

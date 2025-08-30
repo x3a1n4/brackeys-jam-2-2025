@@ -282,7 +282,11 @@ func _on_win():
 	print("winner!")
 	# new node
 	Globals.num_nodes += 1
+	Globals.length += 2
 	# add progress
-	Globals.progress += Globals.risk + 10 + randi_range(0, 5)
+	Globals.max_risk += Globals.risk / 2 + randi_range(0, 5)
+	if Globals.max_risk > 100:
+		Globals.max_risk = 100
+	
 	# transition
 	DialogueManager.show_dialogue_balloon(Globals.dialogue, "win_platforming")

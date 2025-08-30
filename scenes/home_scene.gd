@@ -2,8 +2,8 @@ class_name HomeScene
 
 extends Control
 
-var show_risk_pos : Vector2 = Vector2i(337, 273)
-var hide_risk_pos : Vector2 = Vector2i(337, 2000)
+@onready var show_risk_pos : Vector2 = get_viewport().get_visible_rect().size / 2 - $"Risk it popup".size / 2
+@onready var hide_risk_pos : Vector2 = show_risk_pos + Vector2.DOWN * 2000
 
 @export var lightsCurve : Curve
 
@@ -60,6 +60,8 @@ func turn_on_lights():
 func _process(delta):
 	# popup
 	
+	if Globals.must_use_max_risk:
+		$"Risk it popup/HSlider".ratio = 1
 	$"Risk it popup/RichTextLabel".text = "[center]Risk: %d%%[/center]" % $"Risk it popup/HSlider".value
 	
 	# flick on the lights
