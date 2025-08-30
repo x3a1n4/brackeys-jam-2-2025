@@ -37,20 +37,35 @@ func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vecto
 	
 		# Step 4: filter to only tiles that have that
 		var potentialTileElements = tileLibrary.get_children()
+		# tileLibrary.get_children()[0].get_used_cells()
+		
 		potentialTileElements = potentialTileElements.filter(func(a : TileLibraryElement):
-				a.get_used_cells().any(func(b : Vector2i):
-					tileElement.get_cell_tile_data(b).get_custom_data("type") == targetType
+				return a.get_used_cells().any(func(b : Vector2i):
+					return a.get_cell_tile_data(b).get_custom_data("type") == targetType
 				))
 		# Step 4.1: sort by proximity to difficulty
 		potentialTileElements.sort_custom(func(a : TileLibraryElement, b : TileLibraryElement):
 			return abs(a.difficulty - difficulty) < abs(b.difficulty - difficulty)
 			)
+			
 		
 		# Step 5: for each potential, place to see if there are any overlaps
 		for potentialTileElement : TileLibraryElement in potentialTileElements:
-			# TODO: don't for now
-			add_child(potentialTileElement)
-			print("Found child")
+			# get the start position(s)
+			var potentialEnterTiles = potentialTileElement.get_used_cells().filter(func(a : Vector2i):
+				return potentialTileElement.get_cell_tile_data(a).get_custom_data("type") == targetType
+				)
+			
+			# for each potential start position
+			for potentialEnterTile : Vector2i in potentialEnterTiles:
+				
+				# TODO: check for collisions!
+				var newTileElement : TileLibraryElement = potentialTileElement.duplicate()
+				newTileElement.position = (exitTile - potentialEnterTile) * 128
+				tileElement.add_child(newTileElement)
+				
+				addTiles(newTileElement, depth + 1, potentialEnterTile)
+				break
 			break
 
 # Called when the node enters the scene tree for the first time.
