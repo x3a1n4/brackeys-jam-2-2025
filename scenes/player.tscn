@@ -34,9 +34,9 @@ _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.677749, 0), 0.0, 0.0, 0, 0, Ve
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_jej6c"]
-_limits = [-1.0, 0.0, 0.0, 1.0]
-_data = [Vector2(0, -0.0513834), 0.0, 0.0, 0, 0, Vector2(0.838875, -0.083498), 0.0, 0.0, 0, 0, Vector2(1, -1), -8.37707, 0.0, 0, 0]
-point_count = 3
+_limits = [-2.0, 0.0, 0.0, 1.0]
+_data = [Vector2(0.837709, -0.676095), 0.0, 0.0, 0, 0, Vector2(1, -1.58942), -8.37707, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_oprun"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.505967, 0), -0.12193, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -1415,6 +1415,9 @@ one_shot = true
 one_shot = true
 
 [node name="Swing Timer" type="Timer" parent="Timers"]
+
+[node name="Dash Timer" type="Timer" parent="Timers"]
+one_shot = true
 
 [node name="Swing Path" type="Path2D" parent="."]
 curve = SubResource("Curve2D_y4r1p")

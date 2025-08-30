@@ -37,6 +37,9 @@ var start_swing_pos : Vector2 = Vector2.ZERO
 @onready var swing_path_follow : PathFollow2D = $"Swing Path/PathFollow2D"
 @export var swing_path_samples : int = 100
 
+@export var dash_time = 0.1
+var dash_velocity : Vector2 = Vector2.ZERO
+
 @onready var dash_detection_area : Area2D = $"Dash Detection Area"
 
 func _ready():
@@ -142,7 +145,7 @@ func _physics_process(delta):
 					swing_path.curve.add_point(swing_point + (Vector2.DOWN * radius).rotated(angle))
 				
 				# Step one point eight: set time, longer if it's a longer curve
-				current_swing_time = swing_time + sqrt(radius) / 30
+				current_swing_time = swing_time + sqrt(radius) / 20
 				swing_timer.start(current_swing_time)
 			
 			# Step two: get path by sampling
@@ -153,7 +156,6 @@ func _physics_process(delta):
 			# TODO: visual jitter when moving fast
 			targetVelocity = (target_pos - position) / delta
 			# move_and_collide(target_pos - position, false, 5)
-			
 		"wall_slide":
 			# move left and right depending on air curve
 			# in practice, this will not do anything but push into the wall
@@ -167,8 +169,6 @@ func _physics_process(delta):
 				targetVelocity.x = wall_side.x
 			# set max jumps
 			jump_count = max_jump_count
-		
-		# TODO: handle jumps so that 
 		"jump_ground", "jump_wall", "jump_swing", "jump_double":
 			# move left and right depending on ground_curve
 			# but if was on wall, jump away from the wall
@@ -204,18 +204,18 @@ func _physics_process(delta):
 		
 		# can we dash?
 		if input_dash:
-			# dash
-			targetVelocity = (dash_dest_pos - position) / delta / 3
-			smoothFactor = 1
-			
+			$"Timers/Dash Timer".start(dash_time)
+			# set dash velocity
+			dash_velocity = (dash_dest_pos - position) / delta * dash_time * 2 # two since we're going to the other side
 			# set jumps
 			jump_count = 1
-			
 			# update rope
 			rope.lastSegment.collide({"position": hook.attach_point, "normal": hook.transform.y.normalized()})
-			
 			# consume hold input
 			Input.action_release("Player_Hold")
+		if $"Timers/Dash Timer".time_left > 0:
+			targetVelocity = dash_velocity
+			
 	else:
 		$"Dash Line Attach/Dash Line".visible = false
 			
