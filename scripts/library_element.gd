@@ -70,8 +70,8 @@ func _ready():
 		if tile_atlas_coords != Vector2i(-1, -1):
 			tile_map.set_cell(tile_pos, 0, tile_atlas_coords)
 	
-	# STEP 4: add new tiles from library to ends
-	
+
+func hide_tiles():
 	# STEP 5: hide tool tiles
 	for tile in physics_map.get_used_cells():
 		match physics_map.get_cell_tile_data(tile).get_custom_data("type"):

@@ -31,7 +31,9 @@ texture_region_size = Vector2i(128, 128)
 0:4/0/custom_data_0 = "exit_right"
 6:0/0 = 0
 6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
+6:0/0/custom_data_0 = "invisible_block"
 7:0/0 = 0
+7:0/0/custom_data_0 = "invisible_exit"
 
 [sub_resource type="TileSet" id="TileSet_oobsc"]
 tile_size = Vector2i(128, 128)
