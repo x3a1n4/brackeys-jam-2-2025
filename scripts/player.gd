@@ -45,10 +45,17 @@ var dash_velocity : Vector2 = Vector2.ZERO
 signal win
 signal die
 
+var can_move = true
+
 func _ready():
 	# unparent path
 	remove_child(swing_path)
+	
 	get_tree().get_root().add_child.call_deferred(swing_path)
+	
+	# show dialogue
+	if Globals.num_nodes == 0 and Globals.num_deaths == 0:
+		DialogueManager.show_dialogue_balloon(Globals.dialogue, "intro_inside")
 	
 func sampleSymCurve(curve : Curve, sample : float):
 	if sample < 0:
@@ -217,8 +224,9 @@ func _physics_process(delta):
 			# consume hold input
 			Input.action_release("Player_Hold")
 			
+			print(dash_detection_area)
 			# if this is a goal node, win!
-			if dash_dest_pos is GoalNode:
+			if hook is GoalNode:
 				win.emit()
 		if $"Timers/Dash Timer".time_left > 0:
 			targetVelocity = dash_velocity
@@ -244,7 +252,8 @@ func _physics_process(delta):
 	if velocity.x > 0.2:
 		$Visual.scale.x = 1
 	
-	move_and_slide()
+	if can_move:
+		move_and_slide()
 	
 	# step six: handle rope
 	rope.endPoint = $"Visual/Rope Attach Point".global_position
@@ -255,3 +264,25 @@ func _physics_process(delta):
 func _on_hurtbox_body_entered(body):
 	print("died")
 	die.emit()
+
+
+func _on_die():
+	Globals.died = true
+	Globals.num_deaths += 1
+	$"Death Particles".emitting = true
+	can_move = false
+	create_tween().tween_property($Visual/AnimatedSprite2D, "modulate:a", 0, 0.4)
+	await get_tree().create_timer(0.6).timeout
+	# remove progress? 
+	# Globals.progress = Globals.progress / 1.2
+	
+	Globals.enter_home()
+
+func _on_win():
+	print("winner!")
+	# new node
+	Globals.num_nodes += 1
+	# add progress
+	Globals.progress += Globals.risk + 10 + randi_range(0, 5)
+	# transition
+	DialogueManager.show_dialogue_balloon(Globals.dialogue, "win_platforming")

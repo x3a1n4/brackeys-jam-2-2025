@@ -2,8 +2,8 @@ class_name LayoutGenerator
 
 extends Node2D
 
-@export_range(0, 100) var difficulty : float = 0
-@export_range(10, 30) var iters : int = 20
+var difficulty : float = Globals.risk / 2
+var iters : int = Globals.length
 
 @onready var tileLibrary : Node2D = load("res://scenes/tilemaps/tile_library.tscn").instantiate()
 
@@ -98,4 +98,6 @@ func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vecto
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	difficulty = Globals.risk / 2
+	iters = Globals.length
 	addTiles($"Start Room", 0, Vector2i.ZERO)

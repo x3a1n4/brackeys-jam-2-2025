@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=3 uid="uid://cv5fhuqb640mg"]
+[gd_scene load_steps=85 format=3 uid="uid://cv5fhuqb640mg"]
 
 [ext_resource type="Texture2D" uid="uid://dyilspd1wyf47" path="res://assets/player/idle_stand.png" id="1_3vyb7"]
 [ext_resource type="Texture2D" uid="uid://skwfft5rafxr" path="res://assets/player/air_fall.png" id="1_ur7pv"]
@@ -1320,6 +1320,10 @@ _data = {
 }
 point_count = 1
 
+[sub_resource type="Gradient" id="Gradient_3v2ag"]
+offsets = PackedFloat32Array(0.908136, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
 [node name="Player" type="CharacterBody2D"]
 safe_margin = 5.0
 script = ExtResource("1_y4r1p")
@@ -1430,4 +1434,20 @@ rotation = 1.45109
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
 remote_path = NodePath("../Swing Path")
 
+[node name="Death Particles" type="CPUParticles2D" parent="."]
+position = Vector2(0, -79)
+emitting = false
+amount = 32
+texture = ExtResource("11_3v2ag")
+one_shot = true
+explosiveness = 1.0
+direction = Vector2(0, -1)
+spread = 180.0
+gravity = Vector2(0, 360)
+initial_velocity_min = 495.33
+initial_velocity_max = 495.33
+color_ramp = SubResource("Gradient_3v2ag")
+
+[connection signal="die" from="." to="." method="_on_die"]
+[connection signal="win" from="." to="." method="_on_win"]
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]

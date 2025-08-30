@@ -1,0 +1,105 @@
+# start sequence
+~ intro
+Nathan: This factory's been shut down for a while. 
+Nathan: Something about safety violations.
+Nathan: Apparently they put 12-inch high spikes anywhere. You're not supposed to do that.
+do Globals.enter_platforming()
+=> END
+
+~ intro_inside
+Avery: Wow, it's a maze in here. What am I looking for?
+Nathan: There should be a port somewhere.
+Nathan: If you connect the wire to it, I can download as much data as possible.
+Nathan: Look out for any weird floating electrical components.
+Avery: I'll do my best
+=> END
+
+~ win_platforming
+match Globals.num_nodes
+	when 1
+		Nathan: Nice! I've got access to a whole file system.
+		Nathan: Get back to home, I'll see what I can find.
+
+do Globals.enter_home()
+=> END
+
+~ win_inside
+match Globals.num_nodes
+	when 0
+		do Globals.turn_on_lights()
+		do Globals.show_risk_popup()
+		Nathan: Ooohhhhohoh testing
+	when 1
+		Nathan: Wow, you got back shockingly fast. You sure are a lot better offscreen.
+		Nathan: One sec,
+		do Globals.turn_on_lights()
+		Avery: Woah.
+		Nathan: Huh. You know those safety violations I was talking about?
+		Nathan: Looks like the factory put those spikes there itself.
+		Nathan: I can get you to a more valuable node, but the security systems don't like it.
+		Nathan: But it'll have way more information on it.
+		Avery: Hmm, so getting more information is riskier.
+		do Globals.show_risk_popup()
+		Nathan: Well, good luck!
+		do Globals.enter_platforming()
+	when 2
+		Nathan: Oh, this is interesting
+		Nathan: The nodes are moving [i]away[/i] from us
+		Nathan: If we wait too long, there will be too many hallways to traverse.
+		Avery: Every time I go in, the path is a bit longer...
+		Nathan: Exactly. 
+		Nathan: But, good news!
+		Nathan: I've unlocked more of the factory. Areas with [i]even more[/i] spikes too.
+		Nathan: And if the nodes are harder to get, then the factory wants to protect them.
+		Nathan: So that's the risk.
+		do Globals.show_risk_popup()
+		Nathan: Try not to die in there!
+		do Globals.enter_platforming()
+	when 3
+		Nathan: You've got the hang of this?
+		match Globals.num_deaths
+			when < 5
+				Avery: I think so?
+				Nathan: Awesome.
+			when < 15
+				Avery: Still getting used to it. This factory's really hard to navigate.
+				Nathan: I hate when abandoned factories do that.
+			else
+				Avery: Uurgh...
+				Nathan: I'll take that as a no.
+		
+		Nathan: The last node to got had some password hints on it. I think I can crack some of these security layers.
+		Avery: I'll try to find some more!
+		do Globals.show_risk_popup()
+		do Globals.enter_platforming()
+=> END
+
+~ death
+match Globals.num_deaths
+	when 1
+		Avery: Owwww...
+		Nathan: Wow, are you ok?
+		Nathan: It's a good thing you had this cable on you, I could just pull you out
+		Avery: ...
+		Avery: I'm glad I was unconscious for that
+		if Globals.num_nodes > 0:
+			do Globals.show_risk_popup()
+		do Globals.enter_platforming()
+	else
+		%
+			Avery: Whoops
+		%	
+			Avery: Dangit
+			Avery: I swear I can do this
+		%
+			Nathan: Are you sure you're ok?
+			Avery: Pretty sure
+		%
+			Avery: ...
+		if Globals.num_nodes > 0:
+			do Globals.show_risk_popup()
+		do Globals.enter_platforming()
+=> END
+
+
+=> END

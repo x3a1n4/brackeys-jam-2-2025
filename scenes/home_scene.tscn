@@ -1,0 +1,142 @@
+[gd_scene load_steps=7 format=3 uid="uid://18j7x20ouxma"]
+
+[ext_resource type="Script" uid="uid://2fjak8nkwe26" path="res://scenes/home_scene.gd" id="1_5rntw"]
+[ext_resource type="Texture2D" uid="uid://dqgbrhv0fvcvs" path="res://assets/ui/home_dark.png" id="1_umrym"]
+[ext_resource type="Texture2D" uid="uid://bjdr4qfjfujov" path="res://assets/ui/home_lights_only.png" id="3_5rntw"]
+
+[sub_resource type="Curve" id="Curve_5rntw"]
+_limits = [0.0, 1.0, 0.0, 2.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0348028, 0.161661), 0.0, 0.0, 0, 0, Vector2(0.104408, 0), 0.0, 0.0, 0, 0, Vector2(0.157773, 0.282244), 0.0, 0.0, 0, 0, Vector2(0.225058, 0), 0.0, 0.0, 0, 0, Vector2(0.2529, 0.109982), 0.0, 0.0, 0, 0, Vector2(0.294664, 0), 0.0, 0.0, 0, 0, Vector2(0.329466, 0.0927563), 0.0, 0.0, 0, 0, Vector2(0.361949, 0), 0.0, 0.0, 0, 0, Vector2(0.394432, 0.0870142), 0.0, 0.0, 0, 0, Vector2(0.426914, 0), 0.0, 0.0, 0, 0, Vector2(0.461717, 0.10424), 0.0, 0.0, 0, 0, Vector2(0.4942, 0), 0.0, 0.0, 0, 0, Vector2(0.568445, 0), 0.0, 0.0, 0, 0, Vector2(0.589327, 0.132951), 0.0, 0.0, 0, 0, Vector2(0.63109, 0), 0.0, 0.0, 0, 0, Vector2(0.853828, 0), 0.0, 0.0, 0, 0, Vector2(1.17401, 0.29947), 0.0, 0.0, 0, 0, Vector2(2, 1), 0.0, 0.0, 0, 0]
+point_count = 19
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jfeqw"]
+bg_color = Color(0.243137, 0.243137, 0.243137, 0.721569)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.162066, 0.162066, 0.162065, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rntw"]
+bg_color = Color(0.809678, 0.504399, 0.493447, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="Home Scene" type="Control" groups=["home scene"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5rntw")
+lightsCurve = SubResource("Curve_5rntw")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.154876, 0.154876, 0.154876, 1)
+
+[node name="Home Dark" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_umrym")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Home Light" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_5rntw")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Lights Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Risk it popup" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -239.0
+offset_top = -51.0
+offset_right = 240.0
+offset_bottom = 93.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jfeqw")
+
+[node name="HSlider" type="HSlider" parent="Risk it popup"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -168.5
+offset_top = -8.0
+offset_right = -150.5
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Risk it popup"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -55.5
+offset_top = 17.0
+offset_right = 55.5
+offset_bottom = 48.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Risk: XX%[/center]"
+
+[node name="Button" type="Button" parent="Risk it popup"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -69.5
+offset_top = -48.0
+offset_right = 71.5
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Enter the Building"
+
+[node name="Slider Blocker" type="Panel" parent="Risk it popup"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -149.5
+offset_top = 68.0
+offset_right = 167.5
+offset_bottom = 76.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5rntw")

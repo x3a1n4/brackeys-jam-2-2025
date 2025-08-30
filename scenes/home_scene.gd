@@ -1,0 +1,67 @@
+class_name HomeScene
+
+extends Control
+
+var show_risk_pos : Vector2 = Vector2i(337, 273)
+var hide_risk_pos : Vector2 = Vector2i(337, 2000)
+
+@export var lightsCurve : Curve
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	$"Risk it popup".set_position(hide_risk_pos)
+	
+	# if lights off
+	if not Globals.lights_on:
+		$"Home Light".modulate.a = 0.0
+	
+	# set slider
+	$"Risk it popup/HSlider".max_value = Globals.max_risk
+	
+	# show dialogue
+	if Globals.died:
+		DialogueManager.show_dialogue_balloon(Globals.dialogue, "death")
+	else:
+		DialogueManager.show_dialogue_balloon(Globals.dialogue, "win_inside")
+
+func show_risk_popup():
+	# tween showing window
+	await create_tween().tween_property($"Risk it popup", "position", show_risk_pos, 1.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT).finished
+	# tween for slider
+	# set slider
+	create_tween().tween_property($"Risk it popup/HSlider", "size:x", lerp(0, 337, float(Globals.max_risk) / 100), 0.5).set_trans(Tween.TRANS_CUBIC)
+	create_tween().tween_property($"Risk it popup/Slider Blocker", "position:x", lerp(72, 407, float(Globals.max_risk) / 100), 0.5).set_trans(Tween.TRANS_CUBIC)
+	create_tween().tween_property($"Risk it popup/Slider Blocker", "size:x", 407 - lerp(72, 407, float(Globals.max_risk) / 100), 0.5).set_trans(Tween.TRANS_CUBIC)
+
+	await $"Risk it popup/Button".pressed
+	
+	Globals.risk = $"Risk it popup/HSlider".value
+
+func hide_risk_popup():
+	create_tween().tween_property($"Risk it popup", "position", hide_risk_pos, 0.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN).finished
+
+func turn_on_lights():
+	print("Got here")
+	$"Lights Timer".start()
+	Globals.lights_on = true
+	
+	await $"Lights Timer".timeout
+	
+	# set up lights flickers
+	var t = create_tween().set_loops()
+	t.tween_property($"Home Light", "modulate:a", 1, 4.0).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property($"Home Light", "modulate:a", 0, 0.8).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property($"Home Light", "modulate:a", 1, 1.0).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property($"Home Light", "modulate:a", 1, 9.0).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property($"Home Light", "modulate:a", 0, 0.8).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property($"Home Light", "modulate:a", 1, 1.0).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	# popup
+	
+	$"Risk it popup/RichTextLabel".text = "[center]Risk: %d%%[/center]" % $"Risk it popup/HSlider".value
+	
+	# flick on the lights
+	if Globals.lights_on:
+		$"Home Light".modulate.a = lightsCurve.sample(lerp(2, 0, $"Lights Timer".time_left / $"Lights Timer".wait_time))

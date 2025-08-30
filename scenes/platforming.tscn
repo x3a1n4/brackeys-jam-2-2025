@@ -23,6 +23,6 @@ show_behind_parent = true
 z_index = 1
 position = Vector2(-1, -227)
 min_segment_length = 30
-startPoint = Vector2(0, -900)
+startPoint = Vector2(-326, -192)
 
 [node name="LayoutGenerator" parent="." instance=ExtResource("3_8liro")]
