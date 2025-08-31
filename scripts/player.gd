@@ -40,7 +40,7 @@ var start_swing_pos : Vector2 = Vector2.ZERO
 @export var dash_time = 0.1
 var dash_velocity : Vector2 = Vector2.ZERO
 
-@export var coyote_time = 0.1
+@export var coyote_time = 0.05
 
 @onready var dash_detection_area : Area2D = $"Dash Detection Area"
 
@@ -86,7 +86,7 @@ func _physics_process(delta):
 	var is_on_floor : bool = $"Timers/Coyote Timer".time_left > 0
 	
 	if is_on_wall_only():
-		$"Timers/Coyote Timer".start(coyote_time)
+		$"Timers/Wall Coyote Timer".start(coyote_time)
 	
 	# handle jump logic here, why not? TODO: move somewhere better
 	var is_jumpting : bool = false
@@ -96,6 +96,8 @@ func _physics_process(delta):
 		
 		if $"Timers/Coyote Timer".time_left > 0:
 			$"Timers/Coyote Timer".stop()
+		elif $"Timers/Wall Coyote Timer".time_left > 0:
+			$"Timers/Wall Coyote Timer".stop()
 		else:
 			jump_count -= 1
 			
@@ -299,7 +301,8 @@ func _on_die():
 		create_tween().tween_property($Visual/AnimatedSprite2D, "modulate:a", 0, 0.4)
 		await get_tree().create_timer(0.6).timeout
 		# remove progress? 
-		Globals.progress = Globals.progress / 1.1
+		if not Globals.must_use_max_risk:
+			Globals.max_risk = Globals.max_risk / 1.05
 		
 		if Globals.num_nodes == 0:
 			Globals.enter_platforming()
@@ -311,7 +314,7 @@ func _on_win():
 	can_die = false
 	# new node
 	Globals.num_nodes += 1
-	Globals.length += 2
+	Globals.length += 1
 	# add progress
 	Globals.max_risk += Globals.risk / 2 + randi_range(0, 5)
 	if Globals.max_risk > 100:

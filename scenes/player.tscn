@@ -1428,6 +1428,8 @@ one_shot = true
 [node name="Coyote Timer" type="Timer" parent="Timers"]
 one_shot = true
 
+[node name="Wall Coyote Timer" type="Timer" parent="Timers"]
+
 [node name="Swing Path" type="Path2D" parent="."]
 curve = SubResource("Curve2D_y4r1p")
 
