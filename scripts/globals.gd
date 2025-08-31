@@ -17,6 +17,8 @@ var transition_rect: ColorRect
 
 var must_use_max_risk : bool = false
 
+@onready var start_time : float = Time.get_unix_time_from_system()
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var layer := CanvasLayer.new()
@@ -70,3 +72,9 @@ func enter_platforming():
 
 func enter_home():
 	change_scene_with_wipe("res://scenes/home_scene.tscn")
+
+func enter_end():
+	change_scene_with_wipe("res://scenes/win_scene.tscn")
+
+func close_game():
+	get_tree().quit()

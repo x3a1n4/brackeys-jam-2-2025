@@ -1,0 +1,117 @@
+[gd_scene load_steps=6 format=3 uid="uid://flvgqtfqvnc"]
+
+[ext_resource type="Script" uid="uid://do7yjtrvc3e1j" path="res://scenes/win_scene.gd" id="1_p78a6"]
+[ext_resource type="Texture2D" uid="uid://cclsu37vg2x6u" path="res://assets/chocolatechipcookies.png" id="2_ecqtd"]
+[ext_resource type="Texture2D" uid="uid://xt2db54ty0y0" path="res://assets/cookies.jpg" id="3_7yt3q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b6ng8"]
+bg_color = Color(0.355, 0.355, 0.355, 0.503)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p78a6"]
+bg_color = Color(0, 0, 0, 0.658)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Win Scene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_p78a6")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_ecqtd")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.629)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_7yt3q")
+expand_mode = 1
+
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_b6ng8")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -521.0
+offset_top = 52.0
+offset_right = -56.0
+offset_bottom = 411.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_p78a6")
+
+[node name="You win!" type="RichTextLabel" parent="Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1920.0
+offset_top = 41.0
+offset_right = -35.0
+offset_bottom = 140.0
+grow_horizontal = 0
+bbcode_enabled = true
+text = "[font_size=72]You win![/font_size]"
+fit_content = true
+horizontal_alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 144.0
+offset_right = -45.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Node Count" type="RichTextLabel" parent="Panel/VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[font_size=36]Nodes connected: XX"
+fit_content = true
+horizontal_alignment = 2
+
+[node name="Death Count" type="RichTextLabel" parent="Panel/VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[font_size=36]Deaths: XX"
+fit_content = true
+horizontal_alignment = 2
+
+[node name="Total Time" type="RichTextLabel" parent="Panel/VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[font_size=36]Total time: XX:XX:XX"
+fit_content = true
+horizontal_alignment = 2
