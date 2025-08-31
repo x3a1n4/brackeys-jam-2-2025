@@ -94,12 +94,12 @@ func _physics_process(delta):
 		is_jumpting = true
 		jump_timer.start(jump_time)
 		
+		if $"Timers/Coyote Timer".time_left == 0 and $"Timers/Wall Coyote Timer".time_left == 0:
+			jump_count -= 1
 		if $"Timers/Coyote Timer".time_left > 0:
 			$"Timers/Coyote Timer".stop()
-		elif $"Timers/Wall Coyote Timer".time_left > 0:
+		if $"Timers/Wall Coyote Timer".time_left > 0:
 			$"Timers/Wall Coyote Timer".stop()
-		else:
-			jump_count -= 1
 			
 	# start wall timer
 	

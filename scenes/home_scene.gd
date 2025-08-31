@@ -64,8 +64,8 @@ func _process(delta):
 		$"Risk it popup/Button".pressed.emit()
 	
 	if Globals.must_use_max_risk:
-		if Globals.length > 15:
-			Globals.length = 15
+		if Globals.length > 10:
+			Globals.length = 10
 		$"Risk it popup/HSlider".ratio = 1
 	$"Risk it popup/RichTextLabel".text = "[center]Risk: %d%%[/center]" % $"Risk it popup/HSlider".value
 	

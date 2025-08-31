@@ -64,7 +64,7 @@ if Globals.max_risk == 100
 			Nathan: It's an administrator node. I can see the whole system.
 			Nathan: I can get you in as far as I can go.
 	
-	Nathan: [b]Everything is open[/b]
+	Nathan: [b]We're at maximum risk now[/b]
 	Nathan: You've gotta be careful
 	Avery: Well...
 	do Globals.must_use_max_risk = true
@@ -138,7 +138,7 @@ match Globals.num_nodes
 		Avery: ...I'm getting another node.
 		do Globals.show_risk_popup()
 		do Globals.enter_platforming()
-	when <12
+	when < 12
 		% 
 			Avery: Got another one.
 			Avery: I think I'm getting the hang of this.

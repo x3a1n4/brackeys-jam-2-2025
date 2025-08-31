@@ -15,7 +15,7 @@ swing_time = 2.0
 
 [node name="Main Camera" type="Camera2D" parent="Player"]
 position = Vector2(-2, -4)
-zoom = Vector2(0.6, 0.6)
+zoom = Vector2(0.5, 0.5)
 position_smoothing_enabled = true
 
 [node name="Rope" parent="." instance=ExtResource("4_8liro")]
