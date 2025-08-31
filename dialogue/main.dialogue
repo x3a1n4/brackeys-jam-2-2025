@@ -149,7 +149,7 @@ match Globals.num_nodes
 			Avery: I'll try to find another in the meantime
 			do Globals.show_risk_popup()
 			do Globals.enter_platforming()
-		% [if Globals.max_risk < 30]
+		% 
 			Nathan: Nice one!
 			Nathan: Hmm, let's see. Some project files, some remote connections but not much
 			Nathan: Wait there's a passwords file!
@@ -161,7 +161,7 @@ match Globals.num_nodes
 			Avery: wait WHAT
 			do Globals.show_risk_popup()
 			do Globals.enter_platforming()
-		% [if Globals.max_risk > 70]
+		% 
 			Nathan: We've gotta be close
 			Nathan: Just a couple more nodes
 			Avery: On it.

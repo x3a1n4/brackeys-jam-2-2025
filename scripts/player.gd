@@ -67,6 +67,7 @@ func sampleSymCurve(curve : Curve, sample : float):
 
 # TODO: bug when you run into walls
 var wall_side = Vector2(0, 0)
+var was_on_floor = false
 func _physics_process(delta):
 	# step one: get inputs
 	var input_direction : float = 0.0
@@ -84,19 +85,32 @@ func _physics_process(delta):
 	if is_on_wall_only():
 		$"Timers/Wall Coyote Timer".start(coyote_time)
 		
+	if Input.is_action_just_pressed("Player_Hold"):
+		$Audio/Grab.play()
+	
+	if not is_on_floor():
+		$Audio/Footsteps.stop()
+		
 	# start wall timer
 	if is_on_floor():
+		if not $Audio/Footsteps.playing:
+			$Audio/Footsteps.play()
+		if not was_on_floor :
+			$Audio/Land.play()
+			was_on_floor = true
 		$"Timers/Coyote Timer".start(coyote_time)
+	else:
+		was_on_floor = false
 	var is_on_floor : bool = $"Timers/Coyote Timer".time_left > 0
 	
 	# handle jump logic here, why not? TODO: move somewhere better
 	# you're still 
 	var is_jumpting : bool = false
 	if input_jump and jump_count > 0:
+		$Audio/Jump.play()
 		is_jumpting = true
 		jump_timer.start(jump_time)
 		
-		print($"Timers/Coyote Timer".time_left, " ", $"Timers/Wall Coyote Timer".time_left)
 		if $"Timers/Coyote Timer".time_left == 0 and $"Timers/Wall Coyote Timer".time_left == 0:
 			jump_count -= 1
 		if $"Timers/Coyote Timer".time_left > 0:
@@ -104,7 +118,6 @@ func _physics_process(delta):
 		if $"Timers/Wall Coyote Timer".time_left > 0:
 			$"Timers/Wall Coyote Timer".stop()
 			
-	
 	
 	if is_on_wall_only() and !was_on_wall:
 		wall_slide_timer.start(wall_slide_time)
@@ -244,6 +257,7 @@ func _physics_process(delta):
 		
 		# can we dash?
 		if input_dash:
+			
 			$"Timers/Dash Timer".start(dash_time)
 			# set dash velocity
 			dash_velocity = (dash_dest_pos - position) / delta * dash_time * 2 # two since we're going to the other side
@@ -257,7 +271,10 @@ func _physics_process(delta):
 			print(dash_detection_area)
 			# if this is a goal node, win!
 			if hook is GoalNode:
+				$Audio/DashWin.play()
 				win.emit()
+			else:
+				$Audio/Dash.play()
 		if $"Timers/Dash Timer".time_left > 0:
 			targetVelocity = dash_velocity
 			
@@ -282,9 +299,10 @@ func _physics_process(delta):
 	if velocity.x > 0.2:
 		$Visual.scale.x = 1
 	
+	if velocity.x == 0.0:
+		$Audio/Footsteps.stop()
+	
 	move_and_slide()
-	
-	
 	
 	# step six: handle rope
 	rope.endPoint = $"Visual/Rope Attach Point".global_position
@@ -301,6 +319,7 @@ func _on_die():
 	if can_die:
 		Globals.died = true
 		Globals.num_deaths += 1
+		$Audio/Death.play()
 		$"Death Particles".emitting = true
 		can_move = false
 		create_tween().tween_property($Visual/AnimatedSprite2D, "modulate:a", 0, 0.4)
@@ -321,7 +340,7 @@ func _on_win():
 	Globals.num_nodes += 1
 	Globals.length += 1
 	# add progress
-	Globals.max_risk += Globals.risk / 2 + randi_range(0, 5)
+	Globals.max_risk += Globals.risk / 2.5 + randi_range(0, 5)
 	if Globals.max_risk > 100:
 		Globals.max_risk = 100
 	

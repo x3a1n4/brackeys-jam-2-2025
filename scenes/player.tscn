@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=3 uid="uid://cv5fhuqb640mg"]
+[gd_scene load_steps=92 format=3 uid="uid://cv5fhuqb640mg"]
 
 [ext_resource type="Texture2D" uid="uid://dyilspd1wyf47" path="res://assets/player/idle_stand.png" id="1_3vyb7"]
 [ext_resource type="Texture2D" uid="uid://skwfft5rafxr" path="res://assets/player/air_fall.png" id="1_ur7pv"]
@@ -12,6 +12,13 @@
 [ext_resource type="Texture2D" uid="uid://dhnutp26ifj3g" path="res://assets/player/wall_slide.png" id="9_a8ls1"]
 [ext_resource type="Texture2D" uid="uid://bhk8ij7hd84xu" path="res://assets/player/jump_indicator_empty.png" id="11_3v2ag"]
 [ext_resource type="Texture2D" uid="uid://cy28srwmevxw8" path="res://assets/player/jump_indicator_filled.png" id="12_jej6c"]
+[ext_resource type="AudioStream" uid="uid://cj8l41vr4h0sk" path="res://assets/audio/land.wav" id="13_jej6c"]
+[ext_resource type="AudioStream" uid="uid://qovxqlosss83" path="res://assets/audio/jump_2.ogg" id="14_qfm1y"]
+[ext_resource type="AudioStream" uid="uid://6tn681qiqvbq" path="res://assets/audio/footsteps.wav" id="15_oprun"]
+[ext_resource type="AudioStream" uid="uid://b8hl7vgb8hl71" path="res://assets/audio/dash.wav" id="16_a8ls1"]
+[ext_resource type="AudioStream" uid="uid://bqfkvrb03hud7" path="res://assets/audio/grab.wav" id="17_qfm1y"]
+[ext_resource type="AudioStream" uid="uid://c874d45tlnr6j" path="res://assets/audio/death.ogg" id="18_fulsm"]
+[ext_resource type="AudioStream" uid="uid://bc72it3f0kkox" path="res://assets/audio/dash_win.ogg" id="19_4r5pv"]
 
 [sub_resource type="Curve" id="Curve_y4r1p"]
 _limits = [0.0, 3.0, 0.0, 1.0]
@@ -1453,6 +1460,32 @@ gravity = Vector2(0, 360)
 initial_velocity_min = 495.33
 initial_velocity_max = 495.33
 color_ramp = SubResource("Gradient_3v2ag")
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Land" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("13_jej6c")
+volume_db = -15.186
+
+[node name="Jump" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("14_qfm1y")
+volume_db = -3.0
+
+[node name="Footsteps" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("15_oprun")
+volume_db = -5.0
+
+[node name="Dash" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("16_a8ls1")
+
+[node name="Grab" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("17_qfm1y")
+
+[node name="Death" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("18_fulsm")
+
+[node name="DashWin" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("19_4r5pv")
 
 [connection signal="die" from="." to="." method="_on_die"]
 [connection signal="win" from="." to="." method="_on_win"]

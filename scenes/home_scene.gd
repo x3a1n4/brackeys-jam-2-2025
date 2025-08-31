@@ -15,6 +15,7 @@ func _ready():
 	# if lights off
 	if not Globals.lights_on:
 		$"Home Light".modulate.a = 0.0
+		$Electricity.stop()
 	
 	# set slider
 	$"Risk it popup/HSlider".max_value = Globals.max_risk
@@ -28,6 +29,7 @@ func _ready():
 
 func show_risk_popup():
 	# tween showing window
+	$Swoosh.play()
 	await create_tween().tween_property($"Risk it popup", "position", show_risk_pos, 1.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT).finished
 	# tween for slider
 	# set slider
@@ -36,6 +38,8 @@ func show_risk_popup():
 	create_tween().tween_property($"Risk it popup/Slider Blocker", "size:x", 407 - lerp(72, 407, float(Globals.max_risk) / 100), 0.5).set_trans(Tween.TRANS_CUBIC)
 
 	await $"Risk it popup/Button".pressed
+	
+	$Confirm.play()
 	
 	Globals.risk = $"Risk it popup/HSlider".value
 
@@ -46,6 +50,8 @@ func turn_on_lights():
 	print("Got here")
 	$"Lights Timer".start()
 	Globals.lights_on = true
+	
+	$Electricity.play()
 	
 	await $"Lights Timer".timeout
 	
@@ -73,3 +79,8 @@ func _process(delta):
 	# flick on the lights
 	if Globals.lights_on:
 		$"Home Light".modulate.a = lightsCurve.sample(lerp(2, 0, $"Lights Timer".time_left / $"Lights Timer".wait_time))
+		$Electricity.volume_db = lightsCurve.sample(lerp(-40, -50, $"Lights Timer".time_left / $"Lights Timer".wait_time))
+
+
+func _on_h_slider_value_changed(value):
+	$Click.play()
