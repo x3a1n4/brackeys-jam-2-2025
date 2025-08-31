@@ -208,6 +208,17 @@ match Globals.num_deaths
 		if Globals.num_nodes > 0:
 			do Globals.show_risk_popup()
 		do Globals.enter_platforming()
+	when 2
+		Avery: Dangit
+		Nathan: Hmm, looks like the factory's getting to us
+		Nathan: I'm slowly losing data.
+		Avery: Maybe the factory learned from what I did wrong?
+		Nathan: Somehow.
+		Avery: I'll try not to die.
+		if Globals.num_nodes > 0:
+			do Globals.show_risk_popup()
+		Nathan: Usually a good plan.
+		do Globals.enter_platforming()
 	else
 		%
 			Avery: Whoops

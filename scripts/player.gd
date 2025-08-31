@@ -40,6 +40,8 @@ var start_swing_pos : Vector2 = Vector2.ZERO
 @export var dash_time = 0.1
 var dash_velocity : Vector2 = Vector2.ZERO
 
+@export var coyote_time = 0.1
+
 @onready var dash_detection_area : Area2D = $"Dash Detection Area"
 
 signal win
@@ -79,12 +81,24 @@ func _physics_process(delta):
 		input_dash = Input.is_action_just_pressed("Player_Dash")
 		input_hold = Input.is_action_pressed("Player_Hold")
 	
+	if is_on_floor():
+		$"Timers/Coyote Timer".start(coyote_time)
+	var is_on_floor : bool = $"Timers/Coyote Timer".time_left > 0
+	
+	if is_on_wall_only():
+		$"Timers/Coyote Timer".start(coyote_time)
+	
 	# handle jump logic here, why not? TODO: move somewhere better
 	var is_jumpting : bool = false
 	if input_jump and jump_count > 0:
 		is_jumpting = true
-		jump_count -= 1
 		jump_timer.start(jump_time)
+		
+		if $"Timers/Coyote Timer".time_left > 0:
+			$"Timers/Coyote Timer".stop()
+		else:
+			jump_count -= 1
+			
 	# start wall timer
 	
 	if is_on_wall_only() and !was_on_wall:
@@ -93,8 +107,8 @@ func _physics_process(delta):
 		was_on_wall = true
 	
 	# step two: set AnimationTree flags
-	animationTree.set("parameters/conditions/ground", is_on_floor())
-	animationTree.set("parameters/conditions/Not ground", not is_on_floor())
+	animationTree.set("parameters/conditions/ground", is_on_floor)
+	animationTree.set("parameters/conditions/Not ground", not is_on_floor)
 	animationTree.set("parameters/conditions/jump", is_jumpting)
 	animationTree.set("parameters/conditions/swing", input_hold)
 	animationTree.set("parameters/conditions/Not Swing", not input_hold)
@@ -196,6 +210,9 @@ func _physics_process(delta):
 			# fall according to jump
 			targetVelocity.y = -jump_curve.sample(lerp(1, 0, jump_timer.time_left / jump_time)) * GLOBAL_MULT
 			
+			if not Input.is_action_pressed("Player_Jump"):
+				targetVelocity.y = 0
+			
 			# if we hit head, set timer to when it's going down
 			if hit_head:
 				jump_timer.start(0.1)
@@ -282,7 +299,7 @@ func _on_die():
 		create_tween().tween_property($Visual/AnimatedSprite2D, "modulate:a", 0, 0.4)
 		await get_tree().create_timer(0.6).timeout
 		# remove progress? 
-		# Globals.progress = Globals.progress / 1.2
+		Globals.progress = Globals.progress / 1.1
 		
 		if Globals.num_nodes == 0:
 			Globals.enter_platforming()

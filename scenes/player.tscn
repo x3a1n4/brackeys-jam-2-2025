@@ -209,8 +209,8 @@ radius = 28.0
 height = 190.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y4r1p"]
-radius = 19.0
-height = 146.0
+radius = 14.0
+height = 138.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_y4r1p"]
 radius = 16.2788
@@ -1423,6 +1423,9 @@ one_shot = true
 [node name="Swing Timer" type="Timer" parent="Timers"]
 
 [node name="Dash Timer" type="Timer" parent="Timers"]
+one_shot = true
+
+[node name="Coyote Timer" type="Timer" parent="Timers"]
 one_shot = true
 
 [node name="Swing Path" type="Path2D" parent="."]
