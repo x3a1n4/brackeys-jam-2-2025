@@ -9,6 +9,7 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# DEBUG: Globals.must_use_max_risk = true
 	$"Risk it popup".set_position(hide_risk_pos)
 	
 	# if lights off
@@ -60,7 +61,7 @@ func turn_on_lights():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	# popup
-	if Input.is_action_pressed("ui_accept") and Globals.dialogue_active == 1:
+	if Input.is_action_pressed("ui_accept"):
 		$"Risk it popup/Button".pressed.emit()
 	
 	if Globals.must_use_max_risk:

@@ -35,15 +35,6 @@ if Globals.must_use_max_risk
 	Nathan: There's a file on the server. A procedure.
 	Nathan: A [i]recipe[/i]
 	do Globals.enter_end()
-	do wait(10)
-	Nathan: Thanks for playing!
-	do wait(5)
-	Avery: egg_shells is this seriously the best you are at writing
-	egg_shells: Hey cut me some slack it's 5AM here and I'm moving houses tomorrow
-	Avery: Moving houses? Be careful, I hear they're heavy
-	egg_shells: ...
-	egg_shells: This is the end of the game.
-	do Globals.close_game()
 	=> END
 	
 if Globals.max_risk == 100
@@ -235,5 +226,15 @@ match Globals.num_deaths
 		do Globals.enter_platforming()
 => END
 
+~ winner
+Nathan: Thanks for playing!
+do wait(5)
+Avery: egg_shells is this seriously the best you are at writing
+egg_shells: Hey cut me some slack it's 5AM here and I'm moving houses tomorrow
+Avery: Moving houses? Be careful, I hear they're heavy
+egg_shells: ...
+egg_shells: This is the end of the game.
+do Globals.close_game()
+=> END
 
 => END
