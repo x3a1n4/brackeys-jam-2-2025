@@ -2,7 +2,7 @@ class_name LayoutGenerator
 
 extends Node2D
 
-var difficulty : float = Globals.risk / 2
+var difficulty : float = Globals.risk / 4
 var iters : int = Globals.length
 
 @onready var tileLibrary : Node2D = load("res://scenes/tilemaps/tile_library.tscn").instantiate()
@@ -13,7 +13,7 @@ var iters : int = Globals.length
 func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vector2i):
 	# This is a recursive function
 	# Step -0.1: sort by proximity to difficulty
-	var targetDifficulty : float = difficulty + randf_range(-5, 5) # add some randomness to difficulty
+	var targetDifficulty : float = difficulty + randf_range(-3, 3) # add some randomness to difficulty
 		
 	# Step 0: if the depth is too big, return 
 	if depth > iters:
@@ -52,7 +52,13 @@ func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vecto
 		
 		potentialTileElements.shuffle() # add some randomness to tiles
 		potentialTileElements.sort_custom(func(a : TileLibraryElement, b : TileLibraryElement):
-			return abs(a.difficulty - targetDifficulty) < abs(b.difficulty - targetDifficulty) # add some randomness
+			var a_diff = abs(a.difficulty - targetDifficulty)
+			if a.difficulty > targetDifficulty:
+				a_diff += 10
+			var b_diff = abs(b.difficulty - targetDifficulty)
+			if b.difficulty > targetDifficulty:
+				b_diff += 10
+			return a_diff < b_diff
 			)
 			
 		# Step 5: for each potential, place to see if there are any overlaps

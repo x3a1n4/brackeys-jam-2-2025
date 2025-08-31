@@ -129,7 +129,7 @@ offset_right = 71.5
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "Enter the Building"
+text = "Enter the Factory"
 
 [node name="Slider Blocker" type="Panel" parent="Risk it popup"]
 layout_mode = 1

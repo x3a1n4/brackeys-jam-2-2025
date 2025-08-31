@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://ctx122ws18x5o"]
+[gd_scene load_steps=11 format=3 uid="uid://ctx122ws18x5o"]
 
 [ext_resource type="Texture2D" uid="uid://drqp5ipos2ek" path="res://assets/level elements/node.png" id="1_oxs65"]
 [ext_resource type="Script" uid="uid://d1p1k67ohy85v" path="res://scenes/goal_node.gd" id="1_ts06r"]
 [ext_resource type="PackedScene" uid="uid://bc1h3w3dhk737" path="res://scenes/rope/hanging_rope.tscn" id="2_8eny5"]
+[ext_resource type="Texture2D" uid="uid://bhk8ij7hd84xu" path="res://assets/player/jump_indicator_empty.png" id="4_ly78q"]
 
 [sub_resource type="Curve" id="Curve_ly78q"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
@@ -30,6 +31,9 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }]
+
+[sub_resource type="Gradient" id="Gradient_c1e2h"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="Goal Node" type="Node2D"]
 script = ExtResource("1_ts06r")
@@ -114,3 +118,15 @@ zoom = Vector2(0.7, 0.7)
 [node name="Position" type="Timer" parent="."]
 wait_time = 6.0
 autostart = true
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 64
+texture = ExtResource("4_ly78q")
+one_shot = true
+explosiveness = 1.0
+spread = 180.0
+gravity = Vector2(0, 270)
+initial_velocity_min = 308.41
+initial_velocity_max = 663.55
+color_ramp = SubResource("Gradient_c1e2h")

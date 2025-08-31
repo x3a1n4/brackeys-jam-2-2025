@@ -16,3 +16,6 @@ func _ready():
 func _process(delta):
 	$"Rope Attach".global_position = orig_point + Vector2.DOWN * position_curve.sample($Position.time_left / $Position.wait_time) * position_mult
 	attach_point = $"Rope Attach".global_position
+
+func used():
+	$CPUParticles2D.emitting = true

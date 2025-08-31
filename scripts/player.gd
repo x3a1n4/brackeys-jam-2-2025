@@ -284,7 +284,10 @@ func _on_die():
 		# remove progress? 
 		# Globals.progress = Globals.progress / 1.2
 		
-		Globals.enter_home()
+		if Globals.num_nodes == 0:
+			Globals.enter_platforming()
+		else:
+			Globals.enter_home()
 
 func _on_win():
 	can_move = false
