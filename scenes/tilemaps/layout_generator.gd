@@ -67,6 +67,7 @@ func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vecto
 			var potentialEnterTiles = potentialTileElement.get_used_cells().filter(func(a : Vector2i):
 				return potentialTileElement.get_cell_tile_data(a).get_custom_data("type") == targetType
 				)
+			potentialEnterTiles.shuffle()
 			# for each potential start position
 			var found : bool = false
 			for potentialEnterTile : Vector2i in potentialEnterTiles:
@@ -105,7 +106,7 @@ func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vecto
 var allInsideTiles : Dictionary[Vector2i, bool] = {}
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	difficulty = Globals.risk / 2
+	difficulty = Globals.risk / 4
 	iters = Globals.length
 	addTiles($"Start Room", 0, Vector2i.ZERO)
 	

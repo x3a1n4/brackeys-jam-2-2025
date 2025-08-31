@@ -210,7 +210,7 @@ height = 190.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y4r1p"]
 radius = 14.0
-height = 138.0
+height = 146.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_y4r1p"]
 radius = 16.2788
@@ -1429,6 +1429,7 @@ one_shot = true
 one_shot = true
 
 [node name="Wall Coyote Timer" type="Timer" parent="Timers"]
+one_shot = true
 
 [node name="Swing Path" type="Path2D" parent="."]
 curve = SubResource("Curve2D_y4r1p")

@@ -81,19 +81,22 @@ func _physics_process(delta):
 		input_dash = Input.is_action_just_pressed("Player_Dash")
 		input_hold = Input.is_action_pressed("Player_Hold")
 	
+	if is_on_wall_only():
+		$"Timers/Wall Coyote Timer".start(coyote_time)
+		
+	# start wall timer
 	if is_on_floor():
 		$"Timers/Coyote Timer".start(coyote_time)
 	var is_on_floor : bool = $"Timers/Coyote Timer".time_left > 0
 	
-	if is_on_wall_only():
-		$"Timers/Wall Coyote Timer".start(coyote_time)
-	
 	# handle jump logic here, why not? TODO: move somewhere better
+	# you're still 
 	var is_jumpting : bool = false
 	if input_jump and jump_count > 0:
 		is_jumpting = true
 		jump_timer.start(jump_time)
 		
+		print($"Timers/Coyote Timer".time_left, " ", $"Timers/Wall Coyote Timer".time_left)
 		if $"Timers/Coyote Timer".time_left == 0 and $"Timers/Wall Coyote Timer".time_left == 0:
 			jump_count -= 1
 		if $"Timers/Coyote Timer".time_left > 0:
@@ -101,7 +104,7 @@ func _physics_process(delta):
 		if $"Timers/Wall Coyote Timer".time_left > 0:
 			$"Timers/Wall Coyote Timer".stop()
 			
-	# start wall timer
+	
 	
 	if is_on_wall_only() and !was_on_wall:
 		wall_slide_timer.start(wall_slide_time)
@@ -218,6 +221,7 @@ func _physics_process(delta):
 			# if we hit head, set timer to when it's going down
 			if hit_head:
 				jump_timer.start(0.1)
+			
 		_:
 			pass
 	
@@ -278,8 +282,9 @@ func _physics_process(delta):
 	if velocity.x > 0.2:
 		$Visual.scale.x = 1
 	
-	
 	move_and_slide()
+	
+	
 	
 	# step six: handle rope
 	rope.endPoint = $"Visual/Rope Attach Point".global_position
