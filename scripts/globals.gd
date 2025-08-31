@@ -19,6 +19,8 @@ var must_use_max_risk : bool = false
 
 @onready var start_time : float = Time.get_unix_time_from_system()
 
+var dialogue_active : int = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var layer := CanvasLayer.new()
@@ -29,6 +31,10 @@ func _ready():
 	transition_rect.size = get_viewport().get_visible_rect().size
 	transition_rect.position.x = -transition_rect.size.x
 	layer.add_child(transition_rect)
+	
+	# handle dialogue
+	DialogueManager.dialogue_started.connect(func(a): dialogue_active += 1)
+	DialogueManager.dialogue_ended.connect(func(a): dialogue_active -= 1)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

@@ -17,6 +17,7 @@ func _ready():
 	
 	# set slider
 	$"Risk it popup/HSlider".max_value = Globals.max_risk
+	$"Risk it popup/HSlider".value = Globals.risk if Globals.risk < Globals.max_risk else Globals.max_risk # set 
 	
 	# show dialogue
 	if Globals.died:
@@ -59,6 +60,8 @@ func turn_on_lights():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	# popup
+	if Input.is_action_pressed("ui_accept") and Globals.dialogue_active == 1:
+		$"Risk it popup/Button".pressed.emit()
 	
 	if Globals.must_use_max_risk:
 		if Globals.length > 15:
