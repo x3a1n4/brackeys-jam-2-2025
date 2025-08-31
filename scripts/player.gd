@@ -46,6 +46,7 @@ signal win
 signal die
 
 var can_move = true
+var can_die = true
 
 func _ready():
 	# unparent path
@@ -66,11 +67,17 @@ func sampleSymCurve(curve : Curve, sample : float):
 var wall_side = Vector2(0, 0)
 func _physics_process(delta):
 	# step one: get inputs
-	var input_direction : float = Input.get_axis("Player_Left", "Player_Right")
-	var input_down : bool = Input.is_action_pressed("Player_Down")
-	var input_jump : bool = Input.is_action_just_pressed("Player_Jump")
-	var input_dash : bool = Input.is_action_just_pressed("Player_Dash")
-	var input_hold : bool = Input.is_action_pressed("Player_Hold")
+	var input_direction : float = 0.0
+	var input_down : bool = false
+	var input_jump : bool = false
+	var input_dash : bool = false
+	var input_hold : bool = false
+	if can_move:
+		input_direction = Input.get_axis("Player_Left", "Player_Right")
+		input_down = Input.is_action_pressed("Player_Down")
+		input_jump = Input.is_action_just_pressed("Player_Jump")
+		input_dash = Input.is_action_just_pressed("Player_Dash")
+		input_hold = Input.is_action_pressed("Player_Hold")
 	
 	# handle jump logic here, why not? TODO: move somewhere better
 	var is_jumpting : bool = false
@@ -252,8 +259,8 @@ func _physics_process(delta):
 	if velocity.x > 0.2:
 		$Visual.scale.x = 1
 	
-	if can_move:
-		move_and_slide()
+	
+	move_and_slide()
 	
 	# step six: handle rope
 	rope.endPoint = $"Visual/Rope Attach Point".global_position
@@ -267,19 +274,21 @@ func _on_hurtbox_body_entered(body):
 
 
 func _on_die():
-	Globals.died = true
-	Globals.num_deaths += 1
-	$"Death Particles".emitting = true
-	can_move = false
-	create_tween().tween_property($Visual/AnimatedSprite2D, "modulate:a", 0, 0.4)
-	await get_tree().create_timer(0.6).timeout
-	# remove progress? 
-	# Globals.progress = Globals.progress / 1.2
-	
-	Globals.enter_home()
+	if can_die:
+		Globals.died = true
+		Globals.num_deaths += 1
+		$"Death Particles".emitting = true
+		can_move = false
+		create_tween().tween_property($Visual/AnimatedSprite2D, "modulate:a", 0, 0.4)
+		await get_tree().create_timer(0.6).timeout
+		# remove progress? 
+		# Globals.progress = Globals.progress / 1.2
+		
+		Globals.enter_home()
 
 func _on_win():
-	print("winner!")
+	can_move = false
+	can_die = false
 	# new node
 	Globals.num_nodes += 1
 	Globals.length += 2

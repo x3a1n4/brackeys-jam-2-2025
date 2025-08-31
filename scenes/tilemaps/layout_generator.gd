@@ -96,8 +96,63 @@ func addTiles(tileElement : TileLibraryElement, depth : int, used_coords : Vecto
 			if found:
 				break
 
+var allInsideTiles : Dictionary[Vector2i, bool] = {}
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	difficulty = Globals.risk / 2
 	iters = Globals.length
 	addTiles($"Start Room", 0, Vector2i.ZERO)
+	
+	# get all inside tile locations
+	
+	for tileLibraryElement in existingTileOffsets.keys():
+		# for each tile 
+		var insideTiles = tileLibraryElement.get_used_cells().filter(func(a : Vector2i):
+			return tileLibraryElement.get_cell_tile_data(a).get_custom_data("is inside")
+			)
+		
+		for insideTileLoc : Vector2i in insideTiles:
+			allInsideTiles.set(insideTileLoc + existingTileOffsets[tileLibraryElement], true)
+	
+	# remove physics tiles
+	for tileLibraryElement in existingTileOffsets.keys():
+		tileLibraryElement.hide_tiles()
+		
+	
+func _process(delta):
+	# For every tile on screen:
+	var rect = Utility.get_camera_world_rect(get_viewport().get_camera_2d())
+	
+	var startRoom : TileLibraryElement = ($"Start Room" as TileLibraryElement)
+	var start = startRoom.local_to_map(startRoom.to_local(rect.position))
+	var end = startRoom.local_to_map(startRoom.to_local(rect.position + rect.size))
+	
+	for x in range(start.x, end.x + 1):
+		for y in range(start.y, end.y + 1):
+			var coords = Vector2i(x, y)
+			# check if tile marked as inside
+			if allInsideTiles.get(coords, false):
+				continue
+			
+			# check if already placed
+			var tile_data : TileData = startRoom.get_cell_tile_data(coords)
+			if tile_data:
+				if tile_data.get_custom_data("is placed"): # means tile exists
+					continue
+			
+			# place the tile!
+			var atlas_coords : Array[Vector2i] = []
+			var probabilities : Array[float] = []
+			var tile_set_source : TileSetAtlasSource = startRoom.tile_set.get_source(0)
+			for i : int in tile_set_source.get_tiles_count():
+				var atlas_coord = tile_set_source.get_tile_id(i)
+				var data : TileData = tile_set_source.get_tile_data(atlas_coord, 0) # 0 = alternative index
+				if data.get_custom_data("is placed"):
+					atlas_coords.append(atlas_coord)
+					probabilities.append(data.probability)
+			
+			# startRoom.tile_set.get_source(0).get_tile_data(Vector2i.Zero)
+			
+			# step 2: get random tile from list
+			var tile : Vector2i = Utility.choose_weighted(atlas_coords, probabilities)
+			startRoom.set_cell(coords, 0, tile)

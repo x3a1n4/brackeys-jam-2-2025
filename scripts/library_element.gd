@@ -14,24 +14,6 @@ func set_corner(dict : Dictionary[Vector2i, String], loc : Vector2i, index : int
 	array[index] = "1"
 	dict[loc] = "".join(array)
 
-# A helper function
-func choose_weighted(items: Array, weights: Array) -> Variant:
-	# Sum of all weights
-	var total_weight = 0.0
-	for w in weights:
-		total_weight += w
-	
-	# Random pick
-	var r = randf() * total_weight
-	var cumulative = 0.0
-	
-	for i in range(items.size()):
-		cumulative += weights[i]
-		if r <= cumulative:
-			return items[i]
-	
-	return items.back() # fallback
-
 func find_tile_with_custom_data(tile_set_source: TileSetAtlasSource, key: String, value) -> Vector2i:
 	# Step 1: get list of tiles
 	var coords : Array[Vector2i] = []
@@ -44,7 +26,7 @@ func find_tile_with_custom_data(tile_set_source: TileSetAtlasSource, key: String
 			probabilities.append(data.probability)
 	
 	# step 2: get random tile from list
-	var tile : Vector2i = choose_weighted(coords, probabilities)
+	var tile : Vector2i = Utility.choose_weighted(coords, probabilities)
 	return tile
 
 # Called when the node enters the scene tree for the first time.
@@ -80,3 +62,5 @@ func hide_tiles():
 				physics_map.set_cell(tile, 0, Vector2i(6, 0))
 			"exit_bottom", "exit_top", "exit_left", "exit_right":
 				physics_map.set_cell(tile, 0, Vector2i(7, 0))
+			"inside":
+				physics_map.set_cell(tile, 0, Vector2i(7, 3))
